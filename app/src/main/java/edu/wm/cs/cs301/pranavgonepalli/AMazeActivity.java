@@ -10,24 +10,39 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.AdapterView;
 
+import java.sql.Array;
+
 public class AMazeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    String[] algorithms = {"Manual", "DFS", "Prim", "Boruvka"};
+    String[] algorithms = {"DFS", "Prim", "Boruvka"};
+    String[] rooms = {"Yes", "No"};
+
+    /**
+     * Create the Spinner that contains the generating algorithms, and ArrayAdapter.
+     * The default generator is DFS.
+     * Also, creates a Spinner for a yes or no choice for rooms, with the default being yes.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
-        Spinner s = findViewById(R.id.maze_generator);
-        s.setOnItemSelectedListener(this);
 
-        ArrayAdapter a = new ArrayAdapter(this, android.R.layout.simple_spinner_item, algorithms);
-        a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner generator_spinner = findViewById(R.id.maze_generator);
+        generator_spinner.setOnItemSelectedListener(this);
+        ArrayAdapter generator = new ArrayAdapter(this, android.R.layout.simple_spinner_item, algorithms);
+        generator.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        generator_spinner.setAdapter(generator);
 
-        s.setAdapter(a);
+        Spinner rooms_spinner = findViewById(R.id.maze_rooms);
+        rooms_spinner.setOnItemSelectedListener(this);
+        ArrayAdapter room = new ArrayAdapter(this, android.R.layout.simple_spinner_item, rooms);
+        room.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rooms_spinner.setAdapter(room);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
-        Toast.makeText(getApplicationContext(), algorithms[position], Toast.LENGTH_LONG).show();
+
     }
     @Override
     public void onNothingSelected(AdapterView<?> arg0){

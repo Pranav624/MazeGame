@@ -2,5 +2,8 @@
     <string name="app_name">AMazeByPranavGonepalli</string>
     <string name="welcome">Welcome to the Maze!</string>
     <string name="maze_difficulty">Maze Difficulty</string>
-    <string name="maze_generator">Maze Generator</string>
+    <string name="maze_generator">Maze Generator: </string>
+    <string name="maze_rooms">Generate with Rooms? </string>
+    <string name="revisit">Revisit</string>
+    <string name="explore">Explore</string>
 </resources>
