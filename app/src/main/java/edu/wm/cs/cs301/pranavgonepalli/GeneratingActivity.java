@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ public class GeneratingActivity extends AppCompatActivity {
     private String[] robot_configurations = {"Premium", "Mediocre", "Soso", "Shaky"};
     private Spinner driver_spinner;
     private Spinner robot_configuration_spinner;
+    private ProgressBar progress_bar;
+    private int progress = 0;
     private int skill;
     private String builder;
     private boolean rooms;
@@ -40,6 +43,8 @@ public class GeneratingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generating);
+
+        progress_bar = (ProgressBar) findViewById(R.id.progress_bar);
 
         driver_spinner = (Spinner) findViewById(R.id.maze_driver);
         ArrayAdapter driver = new ArrayAdapter(this, android.R.layout.simple_spinner_item, drivers);
@@ -69,7 +74,6 @@ public class GeneratingActivity extends AppCompatActivity {
                 if(!adapterView.getItemAtPosition(i).equals("Select")){
                     if(loading == true) {
                         waiting.setText("Maze generation will be completed soon. Please wait");
-                        waiting.setVisibility(TextView.VISIBLE);
                     }
                     else{
                         if(adapterView.getItemAtPosition(i).equals("Manual")){
@@ -78,7 +82,7 @@ public class GeneratingActivity extends AppCompatActivity {
                         else switchToPlayAnimation();
                     }
                 }
-                else waiting.setVisibility(TextView.GONE);
+                else waiting.setText("Maze generating...");
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -125,6 +129,7 @@ public class GeneratingActivity extends AppCompatActivity {
      * This is the background thread that imitates the generation of a maze.
      * It sleeps for the number of seconds specified and then tells the user to select
      * a driver if one isn't chosen yet.
+     * During this time, it also updates the ProgressBar.
      * Otherwise, it'll switch to the respective statePlaying.
      */
     class BackgroundThread implements Runnable{
@@ -136,7 +141,17 @@ public class GeneratingActivity extends AppCompatActivity {
         @Override
         public void run(){
             try{
-                Thread.sleep(seconds*1000);
+                //Thread.sleep(seconds*1000);
+                while(progress < 100){
+                    progress+=1;
+                    GeneratingActivity.this.runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            progress_bar.setProgress(progress);
+                        }
+                    });
+                    Thread.sleep(seconds*10);
+                }
                 loading = false;
                 String chosen_driver = driver_spinner.getSelectedItem().toString();
                 if(!chosen_driver.equals("Select")){
@@ -153,7 +168,6 @@ public class GeneratingActivity extends AppCompatActivity {
                         public void run(){
                             TextView waiting = findViewById(R.id.waiting_text);
                             waiting.setText("Maze generation completed. Please select a driver");
-                            waiting.setVisibility(TextView.VISIBLE);
                         }
                     });
                 }
