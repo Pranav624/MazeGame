@@ -8,4 +8,7 @@
     <string name="explore">Explore</string>
     <string name="maze_driver">Maze Driver: </string>
     <string name="robot_configuration">Robot Configuration: </string>
+    <string name="show_map">Show Map</string>
+    <string name="show_solution">Show Solution</string>
+    <string name="show_walls">Show Walls</string>
 </resources>

@@ -74,6 +74,7 @@ public class GeneratingActivity extends AppCompatActivity {
                 if(!adapterView.getItemAtPosition(i).equals("Select")){
                     if(loading == true) {
                         waiting.setText("Maze generation will be completed soon. Please wait");
+                        //Toast.makeText(getApplicationContext(), "Maze generation will be completed soon. Please wait", Toast.LENGTH_LONG).show();
                     }
                     else{
                         if(adapterView.getItemAtPosition(i).equals("Manual")){
@@ -94,6 +95,7 @@ public class GeneratingActivity extends AppCompatActivity {
         skill = intent.getIntExtra("skill", 0);
         builder = intent.getStringExtra("builder");
         rooms = intent.getBooleanExtra("rooms", true);
+        Log.v(TAG, "Parameters Selected in Title Screen: Skill level " + skill + ", Builder " + builder + ", Rooms " + rooms);
         BackgroundThread thread = new BackgroundThread(10);
         new Thread(thread).start();
     }
@@ -158,9 +160,7 @@ public class GeneratingActivity extends AppCompatActivity {
                     if(chosen_driver.equals("Manual")){
                         switchToPlayManually();
                     }
-                    else{
-                        switchToPlayAnimation();
-                    }
+                    else switchToPlayAnimation();
                 }
                 else{
                     GeneratingActivity.this.runOnUiThread(new Runnable(){
@@ -168,6 +168,7 @@ public class GeneratingActivity extends AppCompatActivity {
                         public void run(){
                             TextView waiting = findViewById(R.id.waiting_text);
                             waiting.setText("Maze generation completed. Please select a driver");
+                            //Toast.makeText(getApplicationContext(), "Maze generation completed. Please select a driver", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
