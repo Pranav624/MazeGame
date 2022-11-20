@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 
 public class PlayManuallyActivity extends AppCompatActivity {
@@ -14,6 +17,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private String builder;
     private boolean rooms;
     private String driver;
+    private int pathLength = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,5 +67,54 @@ public class PlayManuallyActivity extends AppCompatActivity {
                 }
             }
         });
+
+        SeekBar zoom_seekbar = (SeekBar) findViewById(R.id.zoom_seekbar);
+        zoom_seekbar.setProgress(5);
+        zoom_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.v(TAG, "Zoom level: " + i);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    /**
+     * Move forward.
+     */
+    public void move(View v){
+        Log.v(TAG, "Forward button was clicked.");
+        pathLength++;
+        Log.v(TAG, "Path length is " + pathLength);
+    }
+
+    /**
+     * Rotate left.
+     */
+    public void rotateLeft(View v){
+        Log.v(TAG, "Rotate left button was clicked.");
+    }
+
+    /**
+     * Rotate right.
+     */
+    public void rotateRight(View v){
+        Log.v(TAG, "Rotate right button was clicked.");
+    }
+
+    /**
+     * Jump over wall.
+     */
+    public void jump(View v){
+        Log.v(TAG, "Jump button was clicked.");
+        pathLength++;
+        Log.v(TAG, "Path length is " + pathLength);
     }
 }
