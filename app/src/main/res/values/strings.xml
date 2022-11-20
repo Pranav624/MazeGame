@@ -6,4 +6,6 @@
     <string name="maze_rooms">Generate with Rooms? </string>
     <string name="revisit">Revisit</string>
     <string name="explore">Explore</string>
+    <string name="maze_driver">Maze Driver: </string>
+    <string name="robot_configuration">Robot Configuration: </string>
 </resources>

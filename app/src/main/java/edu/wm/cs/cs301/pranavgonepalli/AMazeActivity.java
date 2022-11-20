@@ -3,7 +3,6 @@ package edu.wm.cs.cs301.pranavgonepalli;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -13,12 +12,13 @@ import android.widget.TextView;
 
 import java.sql.Array;
 
-public class AMazeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    String[] algorithms = {"DFS", "Prim", "Boruvka"};
-    String[] rooms = {"Yes", "No"};
-    SeekBar skill_level;
-    Spinner generator_spinner;
-    Spinner rooms_spinner;
+public class AMazeActivity extends AppCompatActivity {
+    private String[] algorithms = {"DFS", "Prim", "Boruvka"};
+    private String[] rooms = {"Yes", "No"};
+    private SeekBar skill_level;
+    private Spinner generator_spinner;
+    private Spinner rooms_spinner;
+
     /**
      * Create the Spinner that contains the generating algorithms, and ArrayAdapter.
      * The default generator is DFS.
@@ -33,13 +33,11 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_amaze);
 
         generator_spinner = (Spinner) findViewById(R.id.maze_generator);
-        generator_spinner.setOnItemSelectedListener(this);
         ArrayAdapter generator = new ArrayAdapter(this, android.R.layout.simple_spinner_item, algorithms);
         generator.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         generator_spinner.setAdapter(generator);
 
         rooms_spinner = (Spinner) findViewById(R.id.maze_rooms);
-        rooms_spinner.setOnItemSelectedListener(this);
         ArrayAdapter room = new ArrayAdapter(this, android.R.layout.simple_spinner_item, rooms);
         room.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rooms_spinner.setAdapter(room);
@@ -77,19 +75,14 @@ public class AMazeActivity extends AppCompatActivity implements AdapterView.OnIt
         int skill = skill_level.getProgress();
         String builder = generator_spinner.getSelectedItem().toString();
         String rooms_choice = rooms_spinner.getSelectedItem().toString();
+        boolean rooms_choice_bool = true;
+        if(rooms_choice.equals("No")){
+            rooms_choice_bool = false;
+        }
         Intent intent = new Intent(this, GeneratingActivity.class);
         intent.putExtra("skill", skill);
         intent.putExtra("builder", builder);
-        intent.putExtra("rooms", rooms_choice);
+        intent.putExtra("rooms", rooms_choice_bool);
         startActivity(intent);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
-
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> arg0){
-
     }
 }
