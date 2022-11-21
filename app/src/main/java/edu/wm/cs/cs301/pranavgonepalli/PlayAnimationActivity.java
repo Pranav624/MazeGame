@@ -26,7 +26,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private boolean play = false;
 
     /**
-     *
+     * Make the three switches that allow the user to toggle map, solution, and walls.
+     * Also make the seekbar that allows the user to zoom in and out of the map.
+     * Make another seekbar on the bottom that lets the user change the speed of the animation.
+     * Add a progress bar that changes based on how much energy the robot has remaining.
      * @param savedInstanceState
      */
     @Override

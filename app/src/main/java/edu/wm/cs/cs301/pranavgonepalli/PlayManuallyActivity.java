@@ -21,7 +21,8 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private int pathLength = 0;
 
     /**
-     *
+     * Create the 3 switches that allow the user to toggle map, solution, and walls.
+     * Also make a seekbar on the right side to allow the user to zoom in and out of the map.
      * @param savedInstanceState
      */
     @Override

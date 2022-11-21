@@ -1,7 +1,6 @@
 package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,8 +9,9 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import edu.wm.cs.cs301.pranavgonepalli.R;
-
+/**
+ * Class that draws the custom view for the maze.
+ */
 public class MazePanel extends View {
     private Paint painter;
     private Bitmap bitmap;
@@ -26,12 +26,19 @@ public class MazePanel extends View {
         init();
     }
 
+    /**
+     * Set up the painter, bitmap, and canvas.
+     */
     private void init(){
         painter = new Paint(Paint.ANTI_ALIAS_FLAG);
         bitmap = Bitmap.createBitmap(getContext().getResources().getDisplayMetrics(), 800, 800, Bitmap.Config.ARGB_8888);
         mcanvas = new Canvas(bitmap);
     }
 
+    /**
+     * Draw the custom view.
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
