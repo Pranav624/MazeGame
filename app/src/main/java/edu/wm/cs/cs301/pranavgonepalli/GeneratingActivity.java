@@ -28,6 +28,8 @@ public class GeneratingActivity extends AppCompatActivity {
     private String builder;
     private boolean rooms;
     private boolean loading = true;
+    BackgroundThread thread = new BackgroundThread(10);
+    Thread myThread = new Thread(thread);
 
     /**
      * Create the spinner that contains the drivers the user can choose from.
@@ -96,8 +98,7 @@ public class GeneratingActivity extends AppCompatActivity {
         builder = intent.getStringExtra("builder");
         rooms = intent.getBooleanExtra("rooms", true);
         Log.v(TAG, "Parameters Selected in Title Screen: Skill level " + skill + ", Builder " + builder + ", Rooms " + rooms);
-        BackgroundThread thread = new BackgroundThread(10);
-        new Thread(thread).start();
+        myThread.start();
     }
 
     /**
@@ -124,6 +125,16 @@ public class GeneratingActivity extends AppCompatActivity {
         intent.putExtra("rooms", rooms);
         intent.putExtra("driver", chosen_driver);
         intent.putExtra("robot_configuration", chosen_robot_configuration);
+        startActivity(intent);
+    }
+
+    /**
+     * Back button returns to title screen.
+     */
+    @Override
+    public  void onBackPressed(){
+        myThread.interrupt();
+        Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }
 

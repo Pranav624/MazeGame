@@ -44,4 +44,13 @@ public class WinningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Back button returns to title screen.
+     */
+    @Override
+    public  void onBackPressed(){
+        Intent intent = new Intent(this, AMazeActivity.class);
+        startActivity(intent);
+    }
 }

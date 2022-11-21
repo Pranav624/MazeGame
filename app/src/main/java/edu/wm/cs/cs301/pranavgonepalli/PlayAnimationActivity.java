@@ -179,4 +179,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
         intent.putExtra("reason", "The robot broke!");
         startActivity(intent);
     }
+
+    /**
+     * Back button returns to title screen.
+     */
+    @Override
+    public  void onBackPressed(){
+        Intent intent = new Intent(this, AMazeActivity.class);
+        startActivity(intent);
+    }
 }

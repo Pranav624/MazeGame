@@ -13,6 +13,7 @@ public class LosingActivity extends AppCompatActivity {
     private int energy_consumed = -1;
     private int path_length;
     private String driver;
+    private String reason;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +24,11 @@ public class LosingActivity extends AppCompatActivity {
         path_length = intent.getIntExtra("path_length", 0);
         driver = intent.getStringExtra("driver");
         energy_consumed = 3500 - intent.getIntExtra("energy_remaining", 0);
-        Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed);
+        reason = intent.getStringExtra("reason");
+        Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed + ", Reason " + reason);
 
         TextView reason_text = findViewById(R.id.reason_text);
-        reason_text.setText(intent.getStringExtra("reason"));
+        reason_text.setText(reason);
     }
 
     /**
@@ -34,6 +36,15 @@ public class LosingActivity extends AppCompatActivity {
      * @param v
      */
     public void switchToTitle(View v){
+        Intent intent = new Intent(this, AMazeActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Back button returns to title screen.
+     */
+    @Override
+    public  void onBackPressed(){
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }

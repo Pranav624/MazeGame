@@ -149,4 +149,13 @@ public class PlayManuallyActivity extends AppCompatActivity {
         intent.putExtra("driver", driver);
         startActivity(intent);
     }
+
+    /**
+     * Back button returns to title screen.
+     */
+    @Override
+    public  void onBackPressed(){
+        Intent intent = new Intent(this, AMazeActivity.class);
+        startActivity(intent);
+    }
 }
