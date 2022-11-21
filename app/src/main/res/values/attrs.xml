@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="MazePanel">
+        <attr name="squarecolor" format="color"/>
+    </declare-styleable>
+</resources>

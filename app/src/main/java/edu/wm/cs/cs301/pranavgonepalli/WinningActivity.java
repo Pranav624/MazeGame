@@ -14,6 +14,12 @@ public class WinningActivity extends AppCompatActivity {
     private int path_length;
     private String driver;
 
+    /**
+     * Displays that the user has won.
+     * Also shows the path length, and energy consumed if it was a robot driver.
+     * There's a play again button for the user to go back to the title screen.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

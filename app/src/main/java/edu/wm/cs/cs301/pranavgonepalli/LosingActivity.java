@@ -15,6 +15,12 @@ public class LosingActivity extends AppCompatActivity {
     private String driver;
     private String reason;
 
+    /**
+     * Displays that the robot lost and the reason.
+     * Shows the path length and the energy consumed.
+     * There's a play again button for the user to go back to the title screen.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
