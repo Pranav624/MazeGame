@@ -117,5 +117,65 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:max="2"/>
+    <Button
+        android:id="@+id/forward_sensor_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#34eb43"
+        android:text="F"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/left_sensor_button"/>
+    <Button
+        android:id="@+id/left_sensor_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#34eb43"
+        android:text="L"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintStart_toEndOf="@id/forward_sensor_button"
+        app:layout_constraintEnd_toStartOf="@id/right_sensor_button"/>
+    <Button
+        android:id="@+id/right_sensor_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#34eb43"
+        android:text="R"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintStart_toEndOf="@id/left_sensor_button"
+        app:layout_constraintEnd_toStartOf="@id/backward_sensor_button"/>
+    <Button
+        android:id="@+id/backward_sensor_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#34eb43"
+        android:text="B"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintStart_toEndOf="@id/right_sensor_button"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <Button
+        android:id="@+id/win_button"
+        android:layout_width="135dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toTopOf="@id/lose_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Go2Winning"
+        android:onClick="switchToWinning"/>
+    <Button
+        android:id="@+id/lose_button"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="10dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Go2Losing"
+        android:onClick="switchToLosing"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

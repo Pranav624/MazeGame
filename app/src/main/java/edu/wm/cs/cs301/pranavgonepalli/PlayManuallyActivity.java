@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.Toast;
 
 public class PlayManuallyActivity extends AppCompatActivity {
     private static final String TAG = "PlayManuallyActivity";
@@ -41,9 +42,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Map: ON");
+                    Toast.makeText(getApplicationContext(), "Map ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Map: OFF");
+                    Toast.makeText(getApplicationContext(), "Map OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -53,9 +56,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Solution: ON");
+                    Toast.makeText(getApplicationContext(), "Solution ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Solution: OFF");
+                    Toast.makeText(getApplicationContext(), "Solution OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -65,9 +70,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Walls: ON");
+                    Toast.makeText(getApplicationContext(), "Walls ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Walls: OFF");
+                    Toast.makeText(getApplicationContext(), "Walls OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -99,6 +106,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         Log.v(TAG, "Forward button was clicked.");
         pathLength++;
         Log.v(TAG, "Path length is " + pathLength);
+        Toast.makeText(getApplicationContext(), "Moved forward", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -107,6 +115,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
      */
     public void rotateLeft(View v){
         Log.v(TAG, "Rotate left button was clicked.");
+        Toast.makeText(getApplicationContext(), "Rotated left", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -115,6 +124,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
      */
     public void rotateRight(View v){
         Log.v(TAG, "Rotate right button was clicked.");
+        Toast.makeText(getApplicationContext(), "Rotated right", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -126,13 +136,14 @@ public class PlayManuallyActivity extends AppCompatActivity {
         Log.v(TAG, "Jump button was clicked.");
         pathLength++;
         Log.v(TAG, "Path length is " + pathLength);
+        Toast.makeText(getApplicationContext(), "Jumped", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Switches from PlayManuallyActivity to WinningActivity.
      * @param v
      */
-    public void switchToWinning(View v){
+    public void switchToWinningManual(View v){
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
         intent.putExtra("driver", driver);

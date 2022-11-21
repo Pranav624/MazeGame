@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlayAnimationActivity extends AppCompatActivity {
     private static final String TAG = "PlayAnimationActivity";
@@ -20,8 +22,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private String driver;
     private String robot_configuration;
     private int pathLength = 0;
+    private int energy = 3500;
     private boolean play = false;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +48,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Map: ON");
+                    Toast.makeText(getApplicationContext(), "Map ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Map: OFF");
+                    Toast.makeText(getApplicationContext(), "Map OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -53,9 +62,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Solution: ON");
+                    Toast.makeText(getApplicationContext(), "Solution ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Solution: OFF");
+                    Toast.makeText(getApplicationContext(), "Solution OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -65,9 +76,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Walls: ON");
+                    Toast.makeText(getApplicationContext(), "Walls ON", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Log.v(TAG, "Show Walls: OFF");
+                    Toast.makeText(getApplicationContext(), "Walls OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -117,6 +130,9 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
             }
         });
+
+        ProgressBar energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
+        energy_bar.setProgress(energy);
     }
 
     /**
@@ -130,10 +146,37 @@ public class PlayAnimationActivity extends AppCompatActivity {
         if(play == false){
             Log.v(TAG, "Robot has stopped.");
             play_pause.setText("START");
+            Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
         }
         else{
             Log.v(TAG, "Robot is moving.");
             play_pause.setText("PAUSE");
+            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Switches from PlayAnimationActivity to WinningActivity.
+     * @param v
+     */
+    public void switchToWinning(View v){
+        Intent intent = new Intent(this, WinningActivity.class);
+        intent.putExtra("path_length", pathLength);
+        intent.putExtra("energy_remaining", energy);
+        intent.putExtra("driver", driver);
+        startActivity(intent);
+    }
+
+    /**
+     * Switches from PlayAnimationActivity to LosingActivity.
+     * @param v
+     */
+    public void switchToLosing(View v){
+        Intent intent = new Intent(this, LosingActivity.class);
+        intent.putExtra("path_length", pathLength);
+        intent.putExtra("energy_remaining", energy);
+        intent.putExtra("driver", driver);
+        intent.putExtra("reason", "The robot broke!");
+        startActivity(intent);
     }
 }
