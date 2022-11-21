@@ -62,10 +62,10 @@
         app:layout_constraintEnd_toEndOf="@id/show_walls_text"/>
     <SeekBar
         android:id="@+id/zoom_seekbar"
-        android:layout_width="500dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:rotation="270"
-        android:layout_marginLeft="130dp"
+        android:layout_marginLeft="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,5 +110,15 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="\u005E"
         android:onClick="move"/>
+    <Button
+        android:id="@+id/win_button"
+        android:layout_width="90dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="SHORT CUT"
+        android:onClick="switchToWinning"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

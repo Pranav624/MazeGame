@@ -19,6 +19,10 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private String driver;
     private int pathLength = 0;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +92,8 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     /**
      * Move forward.
+     * Increment pathLength.
+     * @param v
      */
     public void move(View v){
         Log.v(TAG, "Forward button was clicked.");
@@ -97,6 +103,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     /**
      * Rotate left.
+     * @param v
      */
     public void rotateLeft(View v){
         Log.v(TAG, "Rotate left button was clicked.");
@@ -104,6 +111,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     /**
      * Rotate right.
+     * @param v
      */
     public void rotateRight(View v){
         Log.v(TAG, "Rotate right button was clicked.");
@@ -111,10 +119,23 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     /**
      * Jump over wall.
+     * Increment pathLength.
+     * @param v
      */
     public void jump(View v){
         Log.v(TAG, "Jump button was clicked.");
         pathLength++;
         Log.v(TAG, "Path length is " + pathLength);
+    }
+
+    /**
+     * Switches from PlayManuallyActivity to WinningActivity.
+     * @param v
+     */
+    public void switchToWinning(View v){
+        Intent intent = new Intent(this, WinningActivity.class);
+        intent.putExtra("path_length", pathLength);
+        intent.putExtra("driver", driver);
+        startActivity(intent);
     }
 }

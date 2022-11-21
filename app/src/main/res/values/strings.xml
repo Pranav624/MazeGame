@@ -11,4 +11,6 @@
     <string name="show_map">Show Map</string>
     <string name="show_solution">Show Solution</string>
     <string name="show_walls">Show Walls</string>
+    <string name="remaining_energy">Energy Remaining</string>
+    <string name="animation_speed">Medium</string>
 </resources>
