@@ -72,9 +72,9 @@ public class MazePanel extends View implements P7PanelF22 {
     @Override
     public void addBackground(float percentToExit){
         setColor(0xff949494);
-        addFilledRectangle(0, 0, 1000, 600);
+        addFilledRectangle(0, 0, 1000, 500);
         setColor(0xff000000);
-        addFilledRectangle(0, 600, 1000, 400);
+        addFilledRectangle(0, 500, 1000, 500);
     }
 
     /**
