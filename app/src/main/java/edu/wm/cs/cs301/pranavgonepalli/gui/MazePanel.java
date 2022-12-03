@@ -12,10 +12,11 @@ import android.view.View;
 /**
  * Class that draws the custom view for the maze.
  */
-public class MazePanel extends View {
+public class MazePanel extends View implements P7PanelF22 {
     private Paint painter;
     private Bitmap bitmap;
-    private Canvas mcanvas;
+    private Canvas myCanvas;
+    private boolean isOperational;
 
     public MazePanel(Context context){
         super(context);
@@ -30,9 +31,10 @@ public class MazePanel extends View {
      * Set up the painter, bitmap, and canvas.
      */
     private void init(){
-        painter = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bitmap = Bitmap.createBitmap(getContext().getResources().getDisplayMetrics(), 800, 800, Bitmap.Config.ARGB_8888);
-        mcanvas = new Canvas(bitmap);
+        painter = new Paint();
+        bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888);
+        myCanvas = new Canvas(bitmap);
+        isOperational = true;
     }
 
     /**
@@ -42,22 +44,133 @@ public class MazePanel extends View {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, null, new Rect(130, 790, 930, 1590), null);
+        canvas.drawBitmap(bitmap, 130, 790, null);
         drawTestImage(canvas);
+    }
+
+    @Override
+    public void commit(){
+        invalidate();
+    }
+
+    @Override
+    public boolean isOperational(){
+        return isOperational;
+    }
+
+    @Override
+    public void setColor(int argb){
+        painter.setColor(argb);
+    }
+
+    @Override
+    public int getColor(){
+        return painter.getColor();
+    }
+
+    @Override
+    public void addBackground(float percentToExit){
+
     }
 
     /**
      * Draws a filled rectangle.
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param color
+     * @param x is the x-coordinate of the top left corner
+     * @param y is the y-coordinate of the top left corner
+     * @param width is the width of the rectangle
+     * @param height is the height of the rectangle
      */
-    private void drawFilledRectangle(int x, int y, int width, int height, int color){
+    @Override
+    public void addFilledRectangle(int x, int y, int width, int height){
         painter.setStyle(Paint.Style.FILL);
-        painter.setColor(color);
-        mcanvas.drawRect(x, y, x + width, y + height, painter);
+        myCanvas.drawRect(x, y, x + width, y + height, painter);
+    }
+
+    /**
+     * Draws a filled polygon.
+     * @param xPoints are the x-coordinates of points for the polygon
+     * @param yPoints are the y-coordinates of points for the polygon
+     * @param nPoints is the number of points, the length of the arrays
+     */
+    @Override
+    public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints){
+        painter.setStyle(Paint.Style.FILL);
+        Path path = new Path();
+        path.moveTo(xPoints[0], yPoints[0]);
+        for(int x = 1; x < nPoints; x++){
+            path.lineTo(xPoints[x], yPoints[x]);
+        }
+        myCanvas.drawPath(path, painter);
+    }
+
+    /**
+     * Draws a polygon.
+     * @param xPoints are the x-coordinates of points for the polygon
+     * @param yPoints are the y-coordinates of points for the polygon
+     * @param nPoints is the number of points, the length of the arrays
+     */
+    @Override
+    public void addPolygon(int[] xPoints, int[] yPoints, int nPoints){
+        Path path = new Path();
+        path.moveTo(xPoints[0], yPoints[0]);
+        for(int x = 1; x < nPoints; x++){
+            path.lineTo(xPoints[x], yPoints[x]);
+        }
+        myCanvas.drawPath(path, painter);
+    }
+
+    /**
+     * Draws a line.
+     * @param startX is the x-coordinate of the starting point
+     * @param startY is the y-coordinate of the starting point
+     * @param endX is the x-coordinate of the end point
+     * @param endY is the y-coordinate of the end point
+     */
+    @Override
+    public void addLine(int startX, int startY, int endX, int endY){
+
+    }
+
+    /**
+     * Draws a filled oval.
+     * @param x is the x-coordinate of the top left corner
+     * @param y is the y-coordinate of the top left corner
+     * @param width is the width of the oval
+     * @param height is the height of the oval
+     */
+    @Override
+    public void addFilledOval(int x, int y, int width, int height){
+
+    }
+
+    /**
+     * Draws an arc.
+     * @param x the x coordinate of the upper-left corner of the arc to be drawn.
+     * @param y the y coordinate of the upper-left corner of the arc to be drawn.
+     * @param width the width of the arc to be drawn.
+     * @param height the height of the arc to be drawn.
+     * @param startAngle the beginning angle.
+     * @param arcAngle the angular extent of the arc, relative to the start angle.
+     */
+    @Override
+    public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle){
+
+    }
+
+    /**
+     * Draws a string.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param str the string
+     */
+    @Override
+    public void addMarker(float x, float y, String str){
+
+    }
+
+    @Override
+    public void setRenderingHint(P7RenderingHints hintKey, P7RenderingHints hintValue){
+
     }
 
     /**
@@ -70,39 +183,28 @@ public class MazePanel extends View {
     private void drawFilledCircle(int x, int y, int radius, int color){
         painter.setStyle(Paint.Style.FILL);
         painter.setColor(color);
-        mcanvas.drawCircle(x, y, radius, painter);
+        myCanvas.drawCircle(x, y, radius, painter);
     }
 
-    /**
-     * Draws a filled polygon.
-     * @param xPoints
-     * @param yPoints
-     * @param nPoints
-     */
-    private void drawFilledPolygon(int[] xPoints, int[] yPoints, int nPoints, int color){
-        painter.setStyle(Paint.Style.FILL);
-        painter.setColor(color);
-        Path path = new Path();
-        path.moveTo(xPoints[0], yPoints[0]);
-        for(int x = 1; x < nPoints; x++){
-            path.lineTo(xPoints[x], yPoints[x]);
-        }
-        mcanvas.drawPath(path, painter);
-    }
+
     /**
      * Draws the test image as a placeholder for project 6.
      * @param canvas
      */
     private void drawTestImage(Canvas canvas){
-        mcanvas = canvas;
-        drawFilledRectangle(130, 790, 800, 500, 0xff949494);
-        drawFilledRectangle(130, 1290, 800, 300, 0xff000000);
+        myCanvas = canvas;
+        painter.setColor(0xff949494);
+        addFilledRectangle(130, 790, 800, 500);
+        painter.setColor(0xff000000);
+        addFilledRectangle(130, 1290, 800, 300);
         int[] xPoints = {130, 330, 330, 130};
         int[] yPoints = {790, 990, 1390, 1590};
-        drawFilledPolygon(xPoints, yPoints, 4, 0xff00820f);
+        painter.setColor(0xff00820f);
+        addFilledPolygon(xPoints, yPoints, 4);
         int[] xPoints2 = {930, 730, 730, 930};
         int[] yPoints2 = {790, 990, 1390, 1590};
-        drawFilledPolygon(xPoints2, yPoints2, 4, 0xffeeff00);
+        painter.setColor(0xffeeff00);
+        addFilledPolygon(xPoints2, yPoints2, 4);
         drawFilledCircle(530, 930, 100, 0xffff0000);
     }
 }
