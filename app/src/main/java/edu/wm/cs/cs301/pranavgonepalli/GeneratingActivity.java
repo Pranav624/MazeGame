@@ -15,6 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.pranavgonepalli.generation.DefaultOrder;
+import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
+import edu.wm.cs.cs301.pranavgonepalli.generation.MazeFactory;
+import edu.wm.cs.cs301.pranavgonepalli.generation.Order;
+
 public class GeneratingActivity extends AppCompatActivity {
     private static final String TAG = "GeneratingActivity";
 
@@ -23,12 +28,15 @@ public class GeneratingActivity extends AppCompatActivity {
     private Spinner driver_spinner;
     private Spinner robot_configuration_spinner;
     private ProgressBar progress_bar;
-    private int progress = 0;
     private int skill;
-    private String builder;
+    private String builder_string;
+    private Order.Builder builder;
     private boolean rooms;
     private boolean loading = true;
-    BackgroundThread thread = new BackgroundThread(10);
+    private MazeFactory mazeFactory;
+    private DefaultOrder order;
+    private static Maze maze;
+    BackgroundThread thread = new BackgroundThread();
     Thread myThread = new Thread(thread);
 
     /**
@@ -95,10 +103,27 @@ public class GeneratingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         skill = intent.getIntExtra("skill", 0);
-        builder = intent.getStringExtra("builder");
+        builder_string = intent.getStringExtra("builder");
+        if(builder_string.equals("DFS")){
+            builder = Order.Builder.DFS;
+        }
+        else if(builder_string.equals("Prim")){
+            builder = Order.Builder.Prim;
+        }
+        else{
+            builder = Order.Builder.Boruvka;
+        }
         rooms = intent.getBooleanExtra("rooms", true);
-        Log.v(TAG, "Parameters Selected in Title Screen: Skill level " + skill + ", Builder " + builder + ", Rooms " + rooms);
+        Log.v(TAG, "Parameters Selected in Title Screen: Skill level " + skill + ", Builder " + builder_string + ", Rooms " + rooms);
         myThread.start();
+    }
+
+    /**
+     * Returns the maze that was generated.
+     * @return
+     */
+    public static Maze getMaze(){
+        return maze;
     }
 
     /**
@@ -106,9 +131,6 @@ public class GeneratingActivity extends AppCompatActivity {
      */
     public void switchToPlayManually(){
         Intent intent = new Intent(this, PlayManuallyActivity.class);
-        intent.putExtra("skill", skill);
-        intent.putExtra("builder", builder);
-        intent.putExtra("rooms", rooms);
         intent.putExtra("driver", "Manual");
         startActivity(intent);
     }
@@ -120,9 +142,6 @@ public class GeneratingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PlayAnimationActivity.class);
         String chosen_driver = driver_spinner.getSelectedItem().toString();
         String chosen_robot_configuration = robot_configuration_spinner.getSelectedItem().toString();
-        intent.putExtra("skill", skill);
-        intent.putExtra("builder", builder);
-        intent.putExtra("rooms", rooms);
         intent.putExtra("driver", chosen_driver);
         intent.putExtra("robot_configuration", chosen_robot_configuration);
         startActivity(intent);
@@ -146,43 +165,47 @@ public class GeneratingActivity extends AppCompatActivity {
      * Otherwise, it'll switch to the respective statePlaying.
      */
     class BackgroundThread implements Runnable{
-        int seconds;
-
-        BackgroundThread(int seconds){
-            this.seconds = seconds;
-        }
         @Override
         public void run(){
+            mazeFactory = new MazeFactory();
+            order = new DefaultOrder(skill);
+            order.setBuilder(builder);
+            order.setPerfect(!rooms);
+            mazeFactory.order(order);
             try{
-                //Thread.sleep(seconds*1000);
-                while(progress < 100){
-                    progress+=1;
+                while(order.getProgress() < 100){
                     GeneratingActivity.this.runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
-                            progress_bar.setProgress(progress);
+                            progress_bar.setProgress(order.getProgress());
                         }
                     });
-                    Thread.sleep(seconds*10);
+                    Thread.sleep(10);
                 }
                 loading = false;
-                String chosen_driver = driver_spinner.getSelectedItem().toString();
-                if(!chosen_driver.equals("Select")){
-                    if(chosen_driver.equals("Manual")){
-                        switchToPlayManually();
-                    }
-                    else switchToPlayAnimation();
-                }
-                else{
-                    GeneratingActivity.this.runOnUiThread(new Runnable(){
-                        @Override
-                        public void run(){
+                mazeFactory.waitTillDelivered();
+                maze = order.getMaze();
+                GeneratingActivity.this.runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        progress_bar.setProgress(100);
+                        String chosen_driver = driver_spinner.getSelectedItem().toString();
+                        if(!chosen_driver.equals("Select")){
+                            if(chosen_driver.equals("Manual")){
+                                Log.v(TAG, "Switching from generating to manual activity.");
+                                switchToPlayManually();
+                            }
+                            else{
+                                Log.v(TAG, "Switching from generating to animation activity.");
+                                switchToPlayAnimation();
+                            }
+                        }
+                        else{
                             TextView waiting = findViewById(R.id.waiting_text);
                             waiting.setText("Maze generation completed. Please select a driver");
-                            //Toast.makeText(getApplicationContext(), "Maze generation completed. Please select a driver", Toast.LENGTH_LONG).show();
                         }
-                    });
-                }
+                    }
+                });
             } catch (InterruptedException e){
                 e.printStackTrace();
             }

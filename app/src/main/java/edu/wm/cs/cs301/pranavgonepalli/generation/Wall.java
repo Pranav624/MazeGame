@@ -6,8 +6,7 @@ import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import gui.ColorTheme;
-import gui.MazeFileWriter;
+import edu.wm.cs.cs301.pranavgonepalli.gui.MazeFileWriter;
 
 /**
  * A wall is a continuous sequence of wallboards in the maze.
@@ -122,7 +121,7 @@ public class Wall {
         partition = false;
         seen = false;
         // determine color
-        setColor(ColorTheme.getWallColor(distance, cc, getExtensionX()));
+        setColor(0xffff0000);
         // all fields initialized
     }
 

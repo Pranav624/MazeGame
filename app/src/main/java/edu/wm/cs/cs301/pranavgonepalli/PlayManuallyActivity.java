@@ -12,13 +12,13 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
+
 public class PlayManuallyActivity extends AppCompatActivity {
     private static final String TAG = "PlayManuallyActivity";
-    private int skill;
-    private String builder;
-    private boolean rooms;
     private String driver;
     private int pathLength = 0;
+    private Maze maze;
 
     /**
      * Create the 3 switches that allow the user to toggle map, solution, and walls.
@@ -31,11 +31,10 @@ public class PlayManuallyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_manually);
 
         Intent intent = getIntent();
-        skill = intent.getIntExtra("skill", 0);
-        builder = intent.getStringExtra("builder");
-        rooms = intent.getBooleanExtra("rooms", true);
         driver = intent.getStringExtra("driver");
-        Log.v(TAG, "Parameters: Skill level " + skill + ", Builder " + builder + ", Rooms " + rooms + ", Driver " + driver);
+        Log.v(TAG, "Driver " + driver);
+
+        maze = GeneratingActivity.getMaze();
 
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

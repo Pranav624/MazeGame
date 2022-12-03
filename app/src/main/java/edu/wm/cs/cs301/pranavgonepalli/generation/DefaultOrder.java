@@ -6,7 +6,7 @@ package edu.wm.cs.cs301.pranavgonepalli.generation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gui.Constants;
+import edu.wm.cs.cs301.pranavgonepalli.gui.Constants;
 
 /**
  * DefaultOrder provides a basic implementation for an order to 

@@ -14,15 +14,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
+
 public class PlayAnimationActivity extends AppCompatActivity {
     private static final String TAG = "PlayAnimationActivity";
-    private int skill;
-    private String builder;
-    private boolean rooms;
     private String driver;
     private String robot_configuration;
     private int pathLength = 0;
     private int energy = 3500;
+    private Maze maze;
     private boolean play = false;
 
     /**
@@ -38,12 +38,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_animation);
 
         Intent intent = getIntent();
-        skill = intent.getIntExtra("skill", 0);
-        builder = intent.getStringExtra("builder");
-        rooms = intent.getBooleanExtra("rooms", true);
         driver = intent.getStringExtra("driver");
         robot_configuration = intent.getStringExtra("robot_configuration");
-        Log.v(TAG, "Parameters: Skill level " + skill + ", Builder " + builder + ", Rooms " + rooms + ", Driver " + driver + ", Robot configuration " + robot_configuration);
+        Log.v(TAG, "Driver " + driver + ", Robot configuration " + robot_configuration);
+
+        maze = GeneratingActivity.getMaze();
 
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
