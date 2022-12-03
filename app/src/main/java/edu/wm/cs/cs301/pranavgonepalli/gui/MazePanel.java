@@ -32,7 +32,7 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     private void init(){
         painter = new Paint();
-        bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
         myCanvas = new Canvas(bitmap);
         isOperational = true;
     }
@@ -45,6 +45,7 @@ public class MazePanel extends View implements P7PanelF22 {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         canvas.drawBitmap(bitmap, 0, 0, painter);
+        //addBackground(100);
         drawTestImage(canvas);
     }
 
@@ -71,9 +72,9 @@ public class MazePanel extends View implements P7PanelF22 {
     @Override
     public void addBackground(float percentToExit){
         setColor(0xff949494);
-        addFilledRectangle(0, 0, 800, 500);
+        addFilledRectangle(0, 0, 1000, 600);
         setColor(0xff000000);
-        addFilledRectangle(0, 500, 800, 300);
+        addFilledRectangle(0, 600, 1000, 400);
     }
 
     /**
@@ -197,18 +198,19 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     private void drawTestImage(Canvas canvas){
         myCanvas = canvas;
-        painter.setColor(0xff949494);
-        addFilledRectangle(130, 790, 800, 500);
-        painter.setColor(0xff000000);
-        addFilledRectangle(130, 1290, 800, 300);
-        int[] xPoints = {130, 330, 330, 130};
-        int[] yPoints = {790, 990, 1390, 1590};
-        painter.setColor(0xff00820f);
+        setColor(0xff949494);
+        addFilledRectangle(0, 0, 1000, 600);
+        setColor(0xff000000);
+        addFilledRectangle(0, 600, 1000, 400);
+        int[] xPoints = {0, 200, 200, 0};
+        int[] yPoints = {0, 200, 800, 1000};
+        setColor(0xff00820f);
         addFilledPolygon(xPoints, yPoints, 4);
-        int[] xPoints2 = {930, 730, 730, 930};
-        int[] yPoints2 = {790, 990, 1390, 1590};
-        painter.setColor(0xffeeff00);
+        int[] xPoints2 = {1000, 800, 800, 1000};
+        int[] yPoints2 = {0, 200, 800, 1000};
+        setColor(0xffeeff00);
         addFilledPolygon(xPoints2, yPoints2, 4);
-        drawFilledCircle(530, 930, 100, 0xffff0000);
+        setColor(0xffff0000);
+        addFilledOval(450, 50, 100, 100);
     }
 }
