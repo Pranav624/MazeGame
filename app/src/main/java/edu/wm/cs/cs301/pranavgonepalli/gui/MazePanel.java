@@ -44,7 +44,7 @@ public class MazePanel extends View implements P7PanelF22 {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, 130, 790, null);
+        canvas.drawBitmap(bitmap, 0, 0, painter);
         drawTestImage(canvas);
     }
 
@@ -70,7 +70,10 @@ public class MazePanel extends View implements P7PanelF22 {
 
     @Override
     public void addBackground(float percentToExit){
-
+        setColor(0xff949494);
+        addFilledRectangle(0, 0, 800, 500);
+        setColor(0xff000000);
+        addFilledRectangle(0, 500, 800, 300);
     }
 
     /**
@@ -128,7 +131,7 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     @Override
     public void addLine(int startX, int startY, int endX, int endY){
-
+        myCanvas.drawLine(startX, startY, endX, endY, painter);
     }
 
     /**
@@ -140,7 +143,8 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     @Override
     public void addFilledOval(int x, int y, int width, int height){
-
+        painter.setStyle(Paint.Style.FILL);
+        myCanvas.drawOval(x, y, x + width, y + height, painter);
     }
 
     /**
@@ -154,7 +158,7 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     @Override
     public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle){
-
+        myCanvas.drawArc(x, y, x + width, x + height, startAngle, arcAngle, true, painter);
     }
 
     /**
@@ -165,12 +169,12 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     @Override
     public void addMarker(float x, float y, String str){
-
+        myCanvas.drawText(str, x, y, painter);
     }
 
     @Override
     public void setRenderingHint(P7RenderingHints hintKey, P7RenderingHints hintValue){
-
+        painter.setAntiAlias(true);
     }
 
     /**
