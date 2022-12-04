@@ -1,4 +1,4 @@
-package edu.wm.cs.cs301.pranavgonepalli;
+package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.widget.TextView;
 
 import java.sql.Array;
+
+import edu.wm.cs.cs301.pranavgonepalli.R;
 
 public class AMazeActivity extends AppCompatActivity {
     private String[] algorithms = {"DFS", "Prim", "Boruvka"};

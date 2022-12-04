@@ -181,7 +181,7 @@ public class StatePlaying implements State {
 				Constants.VIEW_HEIGHT, Constants.MAP_UNIT,
 				Constants.STEP_SIZE, seenCells, maze.getRootnode()) ;
 		
-		mapView = new Map(seenCells, 15, maze) ;
+		mapView = new Map(seenCells, 100, maze) ;
 		// draw the initial screen for this state
 		draw(cd.angle(), 0);
 	}

@@ -1,4 +1,4 @@
-package edu.wm.cs.cs301.pranavgonepalli;
+package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import edu.wm.cs.cs301.pranavgonepalli.gui.AMazeActivity;
+import edu.wm.cs.cs301.pranavgonepalli.R;
 
 public class WinningActivity extends AppCompatActivity {
     private static final String TAG = "WinningActivity";

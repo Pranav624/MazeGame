@@ -118,7 +118,6 @@ public class CompassRose {
          */
         drawBackground(panel);
         drawArms(panel, armLength, armWidth);
-        drawBorderCircle(panel, width); // note: not currently visible due to color settings
         drawDirectionMarker(panel, width);
     }
 

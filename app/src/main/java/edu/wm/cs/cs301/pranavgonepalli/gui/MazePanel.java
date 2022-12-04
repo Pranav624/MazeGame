@@ -46,7 +46,7 @@ public class MazePanel extends View implements P7PanelF22 {
         super.onDraw(canvas);
         canvas.drawBitmap(bitmap, 0, 0, painter);
         //addBackground(100);
-        drawTestImage(canvas);
+        //drawTestImage(canvas);
     }
 
     @Override
@@ -71,9 +71,9 @@ public class MazePanel extends View implements P7PanelF22 {
 
     @Override
     public void addBackground(float percentToExit){
-        setColor(0xff949494);
-        addFilledRectangle(0, 0, 1000, 500);
         setColor(0xff000000);
+        addFilledRectangle(0, 0, 1000, 500);
+        setColor(0xff1a1a1a);
         addFilledRectangle(0, 500, 1000, 500);
     }
 
@@ -132,6 +132,8 @@ public class MazePanel extends View implements P7PanelF22 {
      */
     @Override
     public void addLine(int startX, int startY, int endX, int endY){
+        painter.setStyle(Paint.Style.STROKE);
+        painter.setStrokeWidth(10);
         myCanvas.drawLine(startX, startY, endX, endY, painter);
     }
 

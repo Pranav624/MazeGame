@@ -1,4 +1,4 @@
-package edu.wm.cs.cs301.pranavgonepalli;
+package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,31 +8,43 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.pranavgonepalli.gui.AMazeActivity;
+import edu.wm.cs.cs301.pranavgonepalli.gui.GeneratingActivity;
+import edu.wm.cs.cs301.pranavgonepalli.gui.LosingActivity;
+import edu.wm.cs.cs301.pranavgonepalli.R;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
 
-public class PlayManuallyActivity extends AppCompatActivity {
-    private static final String TAG = "PlayManuallyActivity";
+public class PlayAnimationActivity extends AppCompatActivity {
+    private static final String TAG = "PlayAnimationActivity";
     private String driver;
+    private String robot_configuration;
     private int pathLength = 0;
+    private int energy = 3500;
     private Maze maze;
+    private boolean play = false;
 
     /**
-     * Create the 3 switches that allow the user to toggle map, solution, and walls.
-     * Also make a seekbar on the right side to allow the user to zoom in and out of the map.
+     * Make the three switches that allow the user to toggle map, solution, and walls.
+     * Also make the seekbar that allows the user to zoom in and out of the map.
+     * Make another seekbar on the bottom that lets the user change the speed of the animation.
+     * Add a progress bar that changes based on how much energy the robot has remaining.
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_manually);
+        setContentView(R.layout.activity_play_animation);
 
         Intent intent = getIntent();
         driver = intent.getStringExtra("driver");
-        Log.v(TAG, "Driver " + driver);
+        robot_configuration = intent.getStringExtra("robot_configuration");
+        Log.v(TAG, "Driver " + driver + ", Robot configuration " + robot_configuration);
 
         maze = GeneratingActivity.getMaze();
 
@@ -95,58 +107,82 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
             }
         });
+
+        SeekBar speed_seekbar = (SeekBar) findViewById(R.id.speed_seekbar);
+        speed_seekbar.setProgress(1);
+        speed_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            TextView speed_text = findViewById(R.id.speed_text);
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(i == 0){
+                    speed_text.setText("Slow");
+                    Log.v(TAG, "Speed: Slow");
+                }
+                else if(i == 1){
+                    speed_text.setText("Medium");
+                    Log.v(TAG, "Speed: Medium");
+                }
+                else{
+                    speed_text.setText("Fast");
+                    Log.v(TAG, "Speed: Fast");
+                }
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        ProgressBar energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
+        energy_bar.setProgress(energy);
     }
 
     /**
-     * Move forward.
-     * Increment pathLength.
+     * Pauses or starts the robot.
+     * If the robot is moving, it stops and if it is stopped, it starts when this function is called.
      * @param v
      */
-    public void move(View v){
-        Log.v(TAG, "Forward button was clicked.");
-        pathLength++;
-        Log.v(TAG, "Path length is " + pathLength);
-        Toast.makeText(getApplicationContext(), "Moved forward", Toast.LENGTH_SHORT).show();
+    public void playOrPause(View v){
+        Button play_pause = (Button) findViewById(R.id.playpause_button);
+        play = !play;
+        if(play == false){
+            Log.v(TAG, "Robot has stopped.");
+            play_pause.setText("START");
+            Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Log.v(TAG, "Robot is moving.");
+            play_pause.setText("PAUSE");
+            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
-     * Rotate left.
+     * Switches from PlayAnimationActivity to WinningActivity.
      * @param v
      */
-    public void rotateLeft(View v){
-        Log.v(TAG, "Rotate left button was clicked.");
-        Toast.makeText(getApplicationContext(), "Rotated left", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Rotate right.
-     * @param v
-     */
-    public void rotateRight(View v){
-        Log.v(TAG, "Rotate right button was clicked.");
-        Toast.makeText(getApplicationContext(), "Rotated right", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Jump over wall.
-     * Increment pathLength.
-     * @param v
-     */
-    public void jump(View v){
-        Log.v(TAG, "Jump button was clicked.");
-        pathLength++;
-        Log.v(TAG, "Path length is " + pathLength);
-        Toast.makeText(getApplicationContext(), "Jumped", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Switches from PlayManuallyActivity to WinningActivity.
-     * @param v
-     */
-    public void switchToWinningManual(View v){
+    public void switchToWinning(View v){
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
+        intent.putExtra("energy_remaining", energy);
         intent.putExtra("driver", driver);
+        startActivity(intent);
+    }
+
+    /**
+     * Switches from PlayAnimationActivity to LosingActivity.
+     * @param v
+     */
+    public void switchToLosing(View v){
+        Intent intent = new Intent(this, LosingActivity.class);
+        intent.putExtra("path_length", pathLength);
+        intent.putExtra("energy_remaining", energy);
+        intent.putExtra("driver", driver);
+        intent.putExtra("reason", "The robot broke!");
         startActivity(intent);
     }
 

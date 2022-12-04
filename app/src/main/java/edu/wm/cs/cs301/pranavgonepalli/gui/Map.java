@@ -235,7 +235,7 @@ public class Map {
 		if (hasAVerticalWall(x, y) && 
 				(seenWalls.hasWall(x, y, CardinalDirection.West) || showMaze)) {
 			panel.setColor(seenWalls.hasWall(x, y, CardinalDirection.West) ?
-					0xffff0000 : 0xff000000);
+					0xffffffff : 0xfff0fc00);
 			panel.addLine(startX, startY, startX, startY - mapScale);
 		}
 	}
@@ -265,7 +265,7 @@ public class Map {
 			int startY) {
 		if (hasAHorizontalWall(x, y) && (seenWalls.hasWall(x,y, CardinalDirection.North) || showMaze) ) {
 			panel.setColor(seenWalls.hasWall(x,y, CardinalDirection.North) ?
-					0xffff0000 : 0xff000000);
+					0xffffffff : 0xfff0fc00);
 			panel.addLine(startX, startY, startX + mapScale, startY);
 		}
 	}
@@ -397,7 +397,7 @@ public class Map {
 		// draw oval of appropriate size at the center of the screen
 		int centerX = viewWidth/2; // center x
 		int centerY = viewHeight/2; // center y
-		int diameter = mapScale/2; // circle size
+		int diameter = mapScale/3; // circle size
 		// we need the top left corner of a bounding box the circle is in
 		// and its width and height to draw the circle
 		// top left corner is (centerX-radius, centerY-radius)
@@ -469,7 +469,7 @@ public class Map {
 		int sy = py;
 		int distance = maze.getDistanceToExit(sx, sy);
 		
-		panel.setColor(0xff757575);
+		panel.setColor(0xffff0000);
 		
 		// while we are more than 1 step away from the final position
 		while (distance > 1) {

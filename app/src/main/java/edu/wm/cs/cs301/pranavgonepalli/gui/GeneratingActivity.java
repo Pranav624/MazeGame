@@ -1,11 +1,9 @@
-package edu.wm.cs.cs301.pranavgonepalli;
+package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.pranavgonepalli.gui.AMazeActivity;
+import edu.wm.cs.cs301.pranavgonepalli.R;
 import edu.wm.cs.cs301.pranavgonepalli.generation.DefaultOrder;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
 import edu.wm.cs.cs301.pranavgonepalli.generation.MazeFactory;
