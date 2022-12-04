@@ -25,8 +25,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private String driver;
     private String robot_configuration;
     private int pathLength = 0;
+    private int shortestPath;
     private int energy = 3500;
     private Maze maze;
+    private StatePlaying statePlaying;
     private boolean play = false;
 
     /**
@@ -45,8 +47,6 @@ public class PlayAnimationActivity extends AppCompatActivity {
         driver = intent.getStringExtra("driver");
         robot_configuration = intent.getStringExtra("robot_configuration");
         Log.v(TAG, "Driver " + driver + ", Robot configuration " + robot_configuration);
-
-        maze = GeneratingActivity.getMaze();
 
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -139,6 +139,14 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
         ProgressBar energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
         energy_bar.setProgress(energy);
+
+        MazePanel panel = findViewById(R.id.maze_view);
+        maze = GeneratingActivity.getMaze();
+        statePlaying = new StatePlaying(this);
+        statePlaying.setMaze(maze);
+        statePlaying.start(panel);
+        int[] currentPosition = statePlaying.getCurrentPosition();
+        shortestPath = maze.getDistanceToExit(currentPosition[0], currentPosition[1]);
     }
 
     /**
@@ -168,6 +176,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
     public void switchToWinning(View v){
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
+        intent.putExtra("shortest_path", shortestPath);
         intent.putExtra("energy_remaining", energy);
         intent.putExtra("driver", driver);
         startActivity(intent);

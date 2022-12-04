@@ -21,8 +21,10 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private static final String TAG = "PlayManuallyActivity";
     private String driver;
     private int pathLength = 0;
+    private int shortestPath;
     private Maze maze;
     private StatePlaying statePlaying;
+    private int zoomLevel = 5;
 
     /**
      * Create the 3 switches that allow the user to toggle map, solution, and walls.
@@ -37,8 +39,6 @@ public class PlayManuallyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         driver = intent.getStringExtra("driver");
         Log.v(TAG, "Driver " + driver);
-
-        maze = GeneratingActivity.getMaze();
 
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,6 +95,17 @@ public class PlayManuallyActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.v(TAG, "Zoom level: " + i);
+                if(i > zoomLevel){
+                    for(int level = 0; level < 10; level++){
+                        statePlaying.handleUserInput(Constants.UserInput.ZOOMIN, 0);
+                    }
+                }
+                else{
+                    for(int level = 0; level < 10; level++){
+                        statePlaying.handleUserInput(Constants.UserInput.ZOOMOUT, 0);
+                    }
+                }
+                zoomLevel = i;
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -107,10 +118,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
         });
 
         MazePanel panel = findViewById(R.id.maze_view);
-        statePlaying = new StatePlaying();
+        maze = GeneratingActivity.getMaze();
+        statePlaying = new StatePlaying(this);
         statePlaying.setMaze(maze);
         statePlaying.start(panel);
-
+        int[] currentPosition = statePlaying.getCurrentPosition();
+        shortestPath = maze.getDistanceToExit(currentPosition[0], currentPosition[1]);
     }
 
     /**
@@ -124,6 +137,10 @@ public class PlayManuallyActivity extends AppCompatActivity {
         Log.v(TAG, "Path length is " + pathLength);
         //Toast.makeText(getApplicationContext(), "Moved forward", Toast.LENGTH_SHORT).show();
         statePlaying.handleUserInput(Constants.UserInput.UP, 0);
+        int[] currentPosition = statePlaying.getCurrentPosition();
+        if(statePlaying.isOutside(currentPosition[0], currentPosition[1])){
+            switchToWinningManual();
+        }
     }
 
     /**
@@ -161,11 +178,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     /**
      * Switches from PlayManuallyActivity to WinningActivity.
-     * @param v
      */
-    public void switchToWinningManual(View v){
+    public void switchToWinningManual(){
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
+        intent.putExtra("shortest_path", shortestPath);
         intent.putExtra("driver", driver);
         startActivity(intent);
     }

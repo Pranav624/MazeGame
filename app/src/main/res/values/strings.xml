@@ -16,6 +16,7 @@
     <string name="congratulations">Congratulations, you won!</string>
     <string name="lose">Oh no, you lost!</string>
     <string name="path_length">Path Length: 0</string>
+    <string name="shortest_path">Shortest Path: 0</string>
     <string name="energy_consumed">Energy Consumed: 0</string>
     <string name="play_again">PLAY AGAIN</string>
 </resources>

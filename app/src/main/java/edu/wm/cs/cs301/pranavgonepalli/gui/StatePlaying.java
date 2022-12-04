@@ -1,5 +1,7 @@
 package edu.wm.cs.cs301.pranavgonepalli.gui;
 
+import android.app.Activity;
+
 import edu.wm.cs.cs301.pranavgonepalli.gui.Constants.UserInput;
 //import edu.wm.cs.cs301.pranavgonepalli.gui.Robot.Direction;
 
@@ -70,6 +72,10 @@ public class StatePlaying implements State {
      */
     private MazePanel panel;
 
+    /**
+     * The Activity that made the StatePlaying object.
+     */
+    private Activity myActivity;
 
     /**
      * Maze holds the main information on where walls are.
@@ -106,12 +112,13 @@ public class StatePlaying implements State {
      * Constructor uses default settings but does not deliver a fully operation instance,
      * requires a call to start() and setMaze().
      */
-    public StatePlaying() {
+    public StatePlaying(Activity activity) {
     	// initialization of some fields is delayed and done in start method
     	firstPersonView = null; // initialized in start method
     	mapView = null; // initialized in start method
     	panel = null; // provided by start method
     	started = false; // method start has not been called yet
+        myActivity = activity;
 
     	maze = null; // provided by set method
 
@@ -181,7 +188,7 @@ public class StatePlaying implements State {
 				Constants.VIEW_HEIGHT, Constants.MAP_UNIT,
 				Constants.STEP_SIZE, seenCells, maze.getRootnode()) ;
 		
-		mapView = new Map(seenCells, 100, maze) ;
+		mapView = new Map(seenCells, 60, maze) ;
 		// draw the initial screen for this state
 		draw(cd.angle(), 0);
 	}
@@ -224,6 +231,7 @@ public class StatePlaying implements State {
             if (isOutside(px,py)) {
             	// TODO: provide actual path length
                 //switchFromPlayingToWinning(0);
+
             }
             break;
         case LEFT: // turn left
@@ -428,7 +436,7 @@ public class StatePlaying implements State {
      * @param y coordinate of position
      * @return true if position is outside, false otherwise
      */
-    private boolean isOutside(int x, int y) {
+    public boolean isOutside(int x, int y) {
         return !maze.isValidPosition(x, y) ;
     }
     /**

@@ -29,6 +29,17 @@
         app:layout_constraintTop_toBottomOf="@id/congratulations"
         app:layout_constraintStart_toStartOf="parent" />
     <TextView
+        android:id="@+id/shortest_path_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shortest_path"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="50dp"
+        app:layout_constraintTop_toBottomOf="@id/path_length_text"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
         android:id="@+id/energy_consumed_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +48,7 @@
         android:textStyle="bold"
         android:layout_marginTop="80dp"
         android:layout_marginLeft="50dp"
-        app:layout_constraintTop_toBottomOf="@id/path_length_text"
+        app:layout_constraintTop_toBottomOf="@id/shortest_path_text"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"/>
     <Button

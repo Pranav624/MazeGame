@@ -126,7 +126,6 @@
         android:layout_marginLeft="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="SHORT CUT"
-        android:onClick="switchToWinningManual"/>
+        android:text="SHORT CUT"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

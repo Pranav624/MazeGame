@@ -15,6 +15,7 @@ public class WinningActivity extends AppCompatActivity {
     private static final String TAG = "WinningActivity";
     private int energy_consumed = -1;
     private int path_length;
+    private int shortest_path;
     private String driver;
 
     /**
@@ -30,6 +31,7 @@ public class WinningActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         path_length = intent.getIntExtra("path_length", 0);
+        shortest_path = intent.getIntExtra("shortest_path", 0);
         driver = intent.getStringExtra("driver");
         if(!driver.equals("Manual")){
             energy_consumed = 3500 - intent.getIntExtra("energy_remaining", 0);
@@ -38,6 +40,8 @@ public class WinningActivity extends AppCompatActivity {
 
         TextView path_length_text = findViewById(R.id.path_length_text);
         path_length_text.setText("Path Length: " + path_length);
+        TextView shortest_path_text = findViewById(R.id.shortest_path_text);
+        shortest_path_text.setText("Shortest Path: " + shortest_path);
         if(energy_consumed != -1){
             TextView energy_consumed_text = findViewById(R.id.energy_consumed_text);
             energy_consumed_text.setText("Energy Consumed: " + energy_consumed);
