@@ -22,8 +22,14 @@ import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
 
 public class PlayAnimationActivity extends AppCompatActivity {
     private static final String TAG = "PlayAnimationActivity";
-    private String driver;
-    private String robot_configuration;
+    private String driver_string;
+    private RobotDriver driver;
+    private String robot_configuration_string;
+    private Robot robot_configuration;
+    private DistanceSensor forward;
+    private DistanceSensor backward;
+    private DistanceSensor left;
+    private DistanceSensor right;
     private int pathLength = 0;
     private int shortestPath;
     private int energy = 3500;
@@ -44,9 +50,9 @@ public class PlayAnimationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_animation);
 
         Intent intent = getIntent();
-        driver = intent.getStringExtra("driver");
-        robot_configuration = intent.getStringExtra("robot_configuration");
-        Log.v(TAG, "Driver " + driver + ", Robot configuration " + robot_configuration);
+        driver_string = intent.getStringExtra("driver");
+        robot_configuration_string = intent.getStringExtra("robot_configuration");
+        Log.v(TAG, "Driver " + driver_string + ", Robot configuration " + robot_configuration_string);
 
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -147,50 +153,111 @@ public class PlayAnimationActivity extends AppCompatActivity {
         statePlaying.start(panel);
         int[] currentPosition = statePlaying.getCurrentPosition();
         shortestPath = maze.getDistanceToExit(currentPosition[0], currentPosition[1]);
+        if(driver_string.equals("Wizard")){driver = new Wizard();}
+        else if(driver_string.equals("Smart Wizard")){driver = new SmartWizard();}
+        else if(driver_string.equals("WallFollower")){driver = new WallFollower();}
+        configureRobot(robot_configuration_string);
+        driver.setRobot(robot_configuration);
+        driver.setMaze(maze);
+//        try{
+//            boolean worked = driver.drive2Exit();
+//            if(worked){switchToWinning();}
+//            else{switchToLosing();}
+//        } catch (Exception e){
+//            switchToLosing();
+//        }
     }
 
+    /**
+     * Creates the robot and adds its sensors based on the configuration string.
+     * @param configuration
+     */
+    public void configureRobot(String configuration){
+        if(configuration.equals("Premium")){
+            robot_configuration = new ReliableRobot();
+            forward = new ReliableSensor();
+            backward = new ReliableSensor();
+            left = new ReliableSensor();
+            right = new ReliableSensor();
+        }
+        else if(configuration.equals("Mediocre")){
+            robot_configuration = new UnreliableRobot();
+            forward = new ReliableSensor();
+            backward = new ReliableSensor();
+            left = new UnreliableSensor();
+            right = new UnreliableSensor();
+        }
+        else if(configuration.equals("Soso")){
+            robot_configuration = new UnreliableRobot();
+            forward = new UnreliableSensor();
+            backward = new UnreliableSensor();
+            left = new ReliableSensor();
+            right = new ReliableSensor();
+        }
+        else if(configuration.equals("Shaky")){
+            robot_configuration = new UnreliableRobot();
+            forward = new UnreliableSensor();
+            backward = new UnreliableSensor();
+            left = new UnreliableSensor();
+            right = new UnreliableSensor();
+        }
+        robot_configuration.setStatePlaying(statePlaying);
+        forward.setMaze(maze);
+        backward.setMaze(maze);
+        left.setMaze(maze);
+        right.setMaze(maze);
+        robot_configuration.addDistanceSensor(forward, Robot.Direction.FORWARD);
+        robot_configuration.addDistanceSensor(backward, Robot.Direction.BACKWARD);
+        robot_configuration.addDistanceSensor(left, Robot.Direction.LEFT);
+        robot_configuration.addDistanceSensor(right, Robot.Direction.RIGHT);
+    }
     /**
      * Pauses or starts the robot.
      * If the robot is moving, it stops and if it is stopped, it starts when this function is called.
      * @param v
      */
     public void playOrPause(View v){
-        Button play_pause = (Button) findViewById(R.id.playpause_button);
-        play = !play;
-        if(play == false){
-            Log.v(TAG, "Robot has stopped.");
-            play_pause.setText("START");
-            Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Log.v(TAG, "Robot is moving.");
-            play_pause.setText("PAUSE");
-            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
+//        Button play_pause = (Button) findViewById(R.id.playpause_button);
+//        play = !play;
+//        if(play == false){
+//            Log.v(TAG, "Robot has stopped.");
+//            play_pause.setText("START");
+//            Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
+//        }
+//        else{
+//            Log.v(TAG, "Robot is moving.");
+//            play_pause.setText("PAUSE");
+//            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
+//        }
+        try{
+            boolean worked = driver.drive2Exit();
+            if(worked){switchToWinning();}
+            else{switchToLosing();}
+        } catch (Exception e){
+            switchToLosing();
         }
     }
 
     /**
      * Switches from PlayAnimationActivity to WinningActivity.
-     * @param v
      */
-    public void switchToWinning(View v){
+    public void switchToWinning(){
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
         intent.putExtra("shortest_path", shortestPath);
         intent.putExtra("energy_remaining", energy);
-        intent.putExtra("driver", driver);
+        intent.putExtra("driver", driver_string);
         startActivity(intent);
     }
 
     /**
      * Switches from PlayAnimationActivity to LosingActivity.
-     * @param v
      */
-    public void switchToLosing(View v){
+    public void switchToLosing(){
         Intent intent = new Intent(this, LosingActivity.class);
         intent.putExtra("path_length", pathLength);
         intent.putExtra("energy_remaining", energy);
-        intent.putExtra("driver", driver);
+        intent.putExtra("driver", driver_string);
         intent.putExtra("reason", "The robot broke!");
         startActivity(intent);
     }

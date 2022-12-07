@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 import edu.wm.cs.cs301.pranavgonepalli.gui.AMazeActivity;
 import edu.wm.cs.cs301.pranavgonepalli.R;
 import edu.wm.cs.cs301.pranavgonepalli.generation.DefaultOrder;
@@ -168,9 +170,9 @@ public class GeneratingActivity extends AppCompatActivity {
         @Override
         public void run(){
             mazeFactory = new MazeFactory();
-            order = new DefaultOrder(skill);
-            order.setBuilder(builder);
-            order.setPerfect(!rooms);
+            Random rand = new Random();
+            int seed = rand.nextInt(100000);
+            order = new DefaultOrder(skill, builder, !rooms, seed);
             mazeFactory.order(order);
             try{
                 while(order.getProgress() < 100){

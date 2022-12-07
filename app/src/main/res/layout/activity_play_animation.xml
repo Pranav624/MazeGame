@@ -172,8 +172,7 @@
         android:layout_marginRight="10dp"
         app:layout_constraintBottom_toTopOf="@id/lose_button"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Go2Winning"
-        android:onClick="switchToWinning"/>
+        android:text="Go2Winning"/>
     <Button
         android:id="@+id/lose_button"
         android:layout_width="120dp"
@@ -183,7 +182,6 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Go2Losing"
-        android:onClick="switchToLosing"/>
+        android:text="Go2Losing"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

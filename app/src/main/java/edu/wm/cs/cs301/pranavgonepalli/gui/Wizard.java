@@ -3,6 +3,8 @@
  */
 package edu.wm.cs.cs301.pranavgonepalli.gui;
 
+import android.util.Log;
+
 import edu.wm.cs.cs301.pranavgonepalli.generation.CardinalDirection;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
 import edu.wm.cs.cs301.pranavgonepalli.gui.Robot.Turn;
@@ -26,6 +28,7 @@ import edu.wm.cs.cs301.pranavgonepalli.gui.Robot.Direction;
  *
  */
 public class Wizard implements RobotDriver {
+	private static final String TAG = "Wizard";
 	
 	protected Robot robot;
 	protected Maze m;
