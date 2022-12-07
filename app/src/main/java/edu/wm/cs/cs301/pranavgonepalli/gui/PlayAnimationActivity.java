@@ -32,7 +32,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private DistanceSensor right;
     private int pathLength = 0;
     private int shortestPath;
-    private int energy = 3500;
+    private float energy = 3500;
+    private int speed = 500;
     private Maze maze;
     private StatePlaying statePlaying;
     private boolean play = false;
@@ -41,6 +42,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private Button left_sensor_button;
     private Button right_sensor_button;
     private Button backward_sensor_button;
+    private ProgressBar energy_bar;
+    private TextView energy_text;
     AnimationThread thread = new AnimationThread();
     Thread myThread = new Thread(thread);
 
@@ -139,14 +142,17 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if(i == 0){
                     speed_text.setText("Slow");
+                    speed = 1000;
                     Log.v(TAG, "Speed: Slow");
                 }
                 else if(i == 1){
                     speed_text.setText("Medium");
+                    speed = 500;
                     Log.v(TAG, "Speed: Medium");
                 }
                 else{
                     speed_text.setText("Fast");
+                    speed = 200;
                     Log.v(TAG, "Speed: Fast");
                 }
             }
@@ -160,8 +166,9 @@ public class PlayAnimationActivity extends AppCompatActivity {
             }
         });
 
-        ProgressBar energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
-        energy_bar.setProgress(energy);
+        energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
+        energy_bar.setProgress((int)energy);
+        energy_text = findViewById(R.id.energy_text);
 
         MazePanel panel = findViewById(R.id.maze_view);
         maze = GeneratingActivity.getMaze();
@@ -317,20 +324,23 @@ public class PlayAnimationActivity extends AppCompatActivity {
         public void run(){
             startSensors(robot_configuration);
             while(!(robot_configuration.isAtExit() && robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
-                PlayAnimationActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateSensors();
 
-                    }
-                });
                 try{
                     driver.drive1Step2Exit();
                 } catch (Exception e){
                     robotStopped = true;
                 }
+                PlayAnimationActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateSensors();
+                        energy = 3500 - driver.getEnergyConsumption();
+                        energy_bar.setProgress((int)energy);
+                        energy_text.setText("Energy Remaining: " + (int)energy);
+                    }
+                });
                 try{
-                    Thread.sleep(500);
+                    Thread.sleep(speed);
                 } catch (Exception e){
                     return;
                 }
