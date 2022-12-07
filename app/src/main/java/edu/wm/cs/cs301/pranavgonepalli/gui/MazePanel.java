@@ -185,14 +185,19 @@ public class MazePanel extends View implements P7PanelF22 {
      * @param x
      * @param y
      * @param radius
-     * @param color
      */
-    private void drawFilledCircle(int x, int y, int radius, int color){
+    public void drawFilledCircle(int x, int y, int radius){
         painter.setStyle(Paint.Style.FILL);
-        painter.setColor(color);
         myCanvas.drawCircle(x, y, radius, painter);
     }
 
+    /**
+     * Returns the canvas.
+     * @return
+     */
+    public Canvas getMyCanvas() {
+        return myCanvas;
+    }
 
     /**
      * Draws the test image as a placeholder for project 6.

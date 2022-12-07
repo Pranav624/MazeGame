@@ -3,12 +3,14 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ public class GeneratingActivity extends AppCompatActivity {
     private String[] robot_configurations = {"Select", "Premium", "Mediocre", "Soso", "Shaky"};
     private Spinner driver_spinner;
     private Spinner robot_configuration_spinner;
-    private ProgressBar progress_bar;
+    private SeekBar progress_bar;
     private int skill;
     private String builder_string;
     private Order.Builder builder;
@@ -56,7 +58,7 @@ public class GeneratingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generating);
 
-        progress_bar = (ProgressBar) findViewById(R.id.progress_bar);
+        progress_bar = (SeekBar) findViewById(R.id.progress_bar);
 
         driver_spinner = (Spinner) findViewById(R.id.maze_driver);
         ArrayAdapter driver = new ArrayAdapter(this, android.R.layout.simple_spinner_item, drivers);
@@ -71,6 +73,10 @@ public class GeneratingActivity extends AppCompatActivity {
         driver_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Typeface font = getResources().getFont(R.font.vt323);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(0xffd03e19);
+                ((TextView) adapterView.getChildAt(0)).setTextSize(25);
+                ((TextView) adapterView.getChildAt(0)).setTypeface(font);
                 TextView robot_text = findViewById(R.id.robot_configuration_text);
                 TextView waiting = findViewById(R.id.waiting_text);
                 if(adapterView.getItemAtPosition(i).equals("Wizard") ||
@@ -91,11 +97,11 @@ public class GeneratingActivity extends AppCompatActivity {
                                 waiting.setText("Please select a robot configuration");
                             }
                             else{
-                                waiting.setText("Maze generation will be completed soon. Please wait");
+                                waiting.setText("Maze generation will be completed soon");
                             }
                         }
                         else{
-                            waiting.setText("Maze generation will be completed soon. Please wait");
+                            waiting.setText("Maze generation will be completed soon");
                         }
                         //Toast.makeText(getApplicationContext(), "Maze generation will be completed soon. Please wait", Toast.LENGTH_LONG).show();
                     }
@@ -127,10 +133,14 @@ public class GeneratingActivity extends AppCompatActivity {
         robot_configuration_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Typeface font = getResources().getFont(R.font.vt323);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(0xffd03e19);
+                ((TextView) adapterView.getChildAt(0)).setTextSize(25);
+                ((TextView) adapterView.getChildAt(0)).setTypeface(font);
                 TextView waiting = findViewById(R.id.waiting_text);
                 if(!adapterView.getItemAtPosition(i).equals("Select")){
                     if(loading == true){
-                        waiting.setText("Maze generation will be completed soon. Please wait");
+                        waiting.setText("Maze generation will be completed soon");
                     }
                     else{
                         String chosen_driver = driver_spinner.getSelectedItem().toString();

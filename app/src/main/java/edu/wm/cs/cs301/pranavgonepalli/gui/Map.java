@@ -3,6 +3,11 @@
  */
 package edu.wm.cs.cs301.pranavgonepalli.gui;
 
+import android.graphics.drawable.Drawable;
+
+import androidx.appcompat.content.res.AppCompatResources;
+
+import edu.wm.cs.cs301.pranavgonepalli.R;
 import edu.wm.cs.cs301.pranavgonepalli.generation.CardinalDirection;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Floorplan;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
@@ -235,7 +240,7 @@ public class Map {
 		if (hasAVerticalWall(x, y) && 
 				(seenWalls.hasWall(x, y, CardinalDirection.West) || showMaze)) {
 			panel.setColor(seenWalls.hasWall(x, y, CardinalDirection.West) ?
-					0xffffffff : 0xfff0fc00);
+					0xffffffff : 0xffff0000);
 			panel.addLine(startX, startY, startX, startY - mapScale);
 		}
 	}
@@ -265,7 +270,7 @@ public class Map {
 			int startY) {
 		if (hasAHorizontalWall(x, y) && (seenWalls.hasWall(x,y, CardinalDirection.North) || showMaze) ) {
 			panel.setColor(seenWalls.hasWall(x,y, CardinalDirection.North) ?
-					0xffffffff : 0xfff0fc00);
+					0xffffffff : 0xffff0000);
 			panel.addLine(startX, startY, startX + mapScale, startY);
 		}
 	}
@@ -393,18 +398,39 @@ public class Map {
 	 * @param viewDY is the current viewing direction, y coordinate
 	 */
 	private void drawCurrentLocation(MazePanel panel, int viewDX, int viewDY) {
-		panel.setColor(0xffff0000);
+		Drawable pacmanright = AppCompatResources.getDrawable(panel.getContext(), R.drawable.pacman);
+		Drawable pacmanleft = AppCompatResources.getDrawable(panel.getContext(), R.drawable.pacmanright);
+		Drawable pacmanup = AppCompatResources.getDrawable(panel.getContext(), R.drawable.pacmanup);
+		Drawable pacmandown = AppCompatResources.getDrawable(panel.getContext(), R.drawable.pacmandown);
+
 		// draw oval of appropriate size at the center of the screen
 		int centerX = viewWidth/2; // center x
 		int centerY = viewHeight/2; // center y
 		int diameter = mapScale/3; // circle size
+		if(viewDX > 0 && viewDY == 0){
+			pacmanright.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanright.draw(panel.getMyCanvas());
+		}
+		else if(viewDX < 0 && viewDY == 0){
+			pacmanleft.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanleft.draw(panel.getMyCanvas());
+		}
+		else if(viewDX == 0 && viewDY > 0){
+			pacmanup.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanup.draw(panel.getMyCanvas());
+		}
+		else{
+			pacmandown.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmandown.draw(panel.getMyCanvas());
+		}
+		panel.setColor(0xffff0000);
 		// we need the top left corner of a bounding box the circle is in
 		// and its width and height to draw the circle
 		// top left corner is (centerX-radius, centerY-radius)
 		// width and height is simply the diameter
-		panel.addFilledOval(centerX-diameter/2, centerY-diameter/2, diameter, diameter);
+		//panel.addFilledOval(centerX-diameter/2, centerY-diameter/2, diameter, diameter);
 		// draw a red arrow with the oval to show current direction
-		drawArrow(panel, viewDX, viewDY, centerX, centerY);
+		//drawArrow(panel, viewDX, viewDY, centerX, centerY);
 	}
 
 	/**
@@ -469,7 +495,7 @@ public class Map {
 		int sy = py;
 		int distance = maze.getDistanceToExit(sx, sy);
 		
-		panel.setColor(0xffff0000);
+		panel.setColor(0xfffae900);
 		
 		// while we are more than 1 step away from the final position
 		while (distance > 1) {
@@ -499,7 +525,9 @@ public class Map {
 			//int ny2 = view_height-1-(neighbor[1]*map_scale + offy) - map_scale/2;
 			int nx2 = mapToCoordinateX(neighbor[0],offsetX) + mapScale/2;
 			int ny2 = mapToCoordinateY(neighbor[1],offsetY) - mapScale/2;
-			panel.addLine(nx1, ny1, nx2, ny2);
+			//panel.addLine(nx1, ny1, nx2, ny2);
+			//panel.addFilledOval(nx2, ny2, 20, 20);
+			panel.drawFilledCircle(nx2, ny2, 8);
 			
 			// update loop variables for current position (sx,sy)
 			// and distance d for next iteration

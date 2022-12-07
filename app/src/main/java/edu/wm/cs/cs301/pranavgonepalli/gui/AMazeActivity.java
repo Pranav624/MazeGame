@@ -2,7 +2,9 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -43,6 +45,30 @@ public class AMazeActivity extends AppCompatActivity {
         ArrayAdapter room = new ArrayAdapter(this, android.R.layout.simple_spinner_item, rooms);
         room.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rooms_spinner.setAdapter(room);
+
+        generator_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Typeface font = getResources().getFont(R.font.vt323);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(0xffd03e19);
+                ((TextView) adapterView.getChildAt(0)).setTextSize(30);
+                ((TextView) adapterView.getChildAt(0)).setTypeface(font);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+        rooms_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Typeface font = getResources().getFont(R.font.vt323);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(0xffd03e19);
+                ((TextView) adapterView.getChildAt(0)).setTextSize(30);
+                ((TextView) adapterView.getChildAt(0)).setTypeface(font);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
         skill_level = (SeekBar) findViewById(R.id.maze_size);
         skill_level.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
