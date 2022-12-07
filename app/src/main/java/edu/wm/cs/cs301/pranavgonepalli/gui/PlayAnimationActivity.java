@@ -36,6 +36,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private Maze maze;
     private StatePlaying statePlaying;
     private boolean play = false;
+    private boolean robotStopped = false;
+    private Button forward_sensor_button;
+    private Button left_sensor_button;
+    private Button right_sensor_button;
+    private Button backward_sensor_button;
+    AnimationThread thread = new AnimationThread();
+    Thread myThread = new Thread(thread);
 
     /**
      * Make the three switches that allow the user to toggle map, solution, and walls.
@@ -54,17 +61,23 @@ public class PlayAnimationActivity extends AppCompatActivity {
         robot_configuration_string = intent.getStringExtra("robot_configuration");
         Log.v(TAG, "Driver " + driver_string + ", Robot configuration " + robot_configuration_string);
 
+        forward_sensor_button = findViewById(R.id.forward_sensor_button);
+        left_sensor_button = findViewById(R.id.left_sensor_button);
+        right_sensor_button = findViewById(R.id.right_sensor_button);
+        backward_sensor_button = findViewById(R.id.backward_sensor_button);
         Switch show_map_switch = (Switch) findViewById(R.id.show_map_switch);
         show_map_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Map: ON");
-                    Toast.makeText(getApplicationContext(), "Map ON", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Map ON", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLELOCALMAP, 0);
                 }
                 else{
                     Log.v(TAG, "Show Map: OFF");
-                    Toast.makeText(getApplicationContext(), "Map OFF", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Map OFF", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLELOCALMAP, 0);
                 }
             }
         });
@@ -74,11 +87,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Solution: ON");
-                    Toast.makeText(getApplicationContext(), "Solution ON", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Solution ON", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLESOLUTION, 0);
                 }
                 else{
                     Log.v(TAG, "Show Solution: OFF");
-                    Toast.makeText(getApplicationContext(), "Solution OFF", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Solution OFF", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLESOLUTION, 0);
                 }
             }
         });
@@ -88,11 +103,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     Log.v(TAG, "Show Walls: ON");
-                    Toast.makeText(getApplicationContext(), "Walls ON", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Walls ON", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLEFULLMAP, 0);
                 }
                 else{
                     Log.v(TAG, "Show Walls: OFF");
-                    Toast.makeText(getApplicationContext(), "Walls OFF", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Walls OFF", Toast.LENGTH_SHORT).show();
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLEFULLMAP, 0);
                 }
             }
         });
@@ -159,13 +176,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         configureRobot(robot_configuration_string);
         driver.setRobot(robot_configuration);
         driver.setMaze(maze);
-//        try{
-//            boolean worked = driver.drive2Exit();
-//            if(worked){switchToWinning();}
-//            else{switchToLosing();}
-//        } catch (Exception e){
-//            switchToLosing();
-//        }
+        //myThread.start();
     }
 
     /**
@@ -211,6 +222,39 @@ public class PlayAnimationActivity extends AppCompatActivity {
         robot_configuration.addDistanceSensor(left, Robot.Direction.LEFT);
         robot_configuration.addDistanceSensor(right, Robot.Direction.RIGHT);
     }
+
+    /**
+     * Starts the failure and repair process for each of the sensors of Robot r.
+     * @param r
+     */
+    public void startSensors(Robot r){
+        try{
+            r.startFailureAndRepairProcess(Robot.Direction.FORWARD, 4000, 2000);
+            Thread.sleep(1300);
+            r.startFailureAndRepairProcess(Robot.Direction.BACKWARD, 4000, 2000);
+            Thread.sleep(1300);
+            r.startFailureAndRepairProcess(Robot.Direction.LEFT, 4000, 2000);
+            Thread.sleep(1300);
+            r.startFailureAndRepairProcess(Robot.Direction.RIGHT, 4000, 2000);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Updates the sensor buttons on the screen, showing whether the sensors are operational or not.
+     */
+    public void updateSensors(){
+        if(forward.getIsOperational()){forward_sensor_button.setBackgroundColor(0xff34eb43);}
+        else{forward_sensor_button.setBackgroundColor(0xffff0000);}
+        if(left.getIsOperational()){left_sensor_button.setBackgroundColor(0xff34eb43);}
+        else{left_sensor_button.setBackgroundColor(0xffff0000);}
+        if(right.getIsOperational()){right_sensor_button.setBackgroundColor(0xff34eb43);}
+        else{right_sensor_button.setBackgroundColor(0xffff0000);}
+        if(backward.getIsOperational()){backward_sensor_button.setBackgroundColor(0xff34eb43);}
+        else{backward_sensor_button.setBackgroundColor(0xffff0000);}
+    }
+
     /**
      * Pauses or starts the robot.
      * If the robot is moving, it stops and if it is stopped, it starts when this function is called.
@@ -229,13 +273,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
 //            play_pause.setText("PAUSE");
 //            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
 //        }
-        try{
-            boolean worked = driver.drive2Exit();
-            if(worked){switchToWinning();}
-            else{switchToLosing();}
-        } catch (Exception e){
-            switchToLosing();
-        }
+        myThread.start();
     }
 
     /**
@@ -269,5 +307,35 @@ public class PlayAnimationActivity extends AppCompatActivity {
     public  void onBackPressed(){
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * This is the background thread that plays the game and updates the animation.
+     */
+    class AnimationThread implements Runnable{
+        @Override
+        public void run(){
+            startSensors(robot_configuration);
+            while(!(robot_configuration.isAtExit() && robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
+                PlayAnimationActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateSensors();
+
+                    }
+                });
+                try{
+                    driver.drive1Step2Exit();
+                } catch (Exception e){
+                    robotStopped = true;
+                }
+                try{
+                    Thread.sleep(500);
+                } catch (Exception e){
+                    return;
+                }
+
+            }
+        }
     }
 }

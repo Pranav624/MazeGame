@@ -149,6 +149,10 @@ public class ReliableSensor implements DistanceSensor {
 		return 1;
 	}
 
+	@Override
+	public boolean getIsOperational(){
+		return true;
+	}
 	/**
 	 * Not used in ReliableSensor.
 	 */

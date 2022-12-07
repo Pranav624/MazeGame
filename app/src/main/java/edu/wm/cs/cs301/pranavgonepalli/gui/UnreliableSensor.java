@@ -74,11 +74,13 @@ public class UnreliableSensor extends ReliableSensor implements Runnable {
 	public Thread getThread() {
 		return thread;
 	}
-	
+
+
 	/**
 	 * Returns if the sensor is operational.
-	 * @return boolean 
+	 * @return
 	 */
+	@Override
 	public boolean getIsOperational() {
 		return isOperational;
 	}

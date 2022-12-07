@@ -107,7 +107,12 @@ public interface DistanceSensor {
 	////// Project assignment 4 for a class UnstableSensor.
 	////// For P3 and the StableSensor class, 
 	////// it is sufficient to throw the UnsupportedOperationException.
-	
+
+	/**
+	 * Returns whether the sensor is operational or not.
+	 * @return
+	 */
+	boolean getIsOperational();
 	/**
 	 * Method starts a concurrent, independent failure and repair
 	 * process that makes the sensor fail and repair itself.
