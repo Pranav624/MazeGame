@@ -32,10 +32,14 @@ public class LosingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         path_length = intent.getIntExtra("path_length", 0);
         driver = intent.getStringExtra("driver");
-        energy_consumed = 3500 - intent.getIntExtra("energy_remaining", 0);
+        energy_consumed = intent.getIntExtra("energy_consumed", 0);
         reason = intent.getStringExtra("reason");
         Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed + ", Reason " + reason);
 
+        TextView path_length_text = findViewById(R.id.path_length_text);
+        path_length_text.setText("Path Length: " + path_length);
+        TextView energy_consumed_text = findViewById(R.id.energy_consumed_text);
+        energy_consumed_text.setText("Energy Consumed: " + energy_consumed);
         TextView reason_text = findViewById(R.id.reason_text);
         reason_text.setText(reason);
     }

@@ -34,7 +34,7 @@ public class WinningActivity extends AppCompatActivity {
         shortest_path = intent.getIntExtra("shortest_path", 0);
         driver = intent.getStringExtra("driver");
         if(!driver.equals("Manual")){
-            energy_consumed = 3500 - intent.getIntExtra("energy_remaining", 0);
+            energy_consumed = intent.getIntExtra("energy_consumed", 0);
         }
         Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed);
 

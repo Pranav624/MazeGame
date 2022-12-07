@@ -3,6 +3,8 @@
  */
 package edu.wm.cs.cs301.pranavgonepalli.gui;
 
+import android.util.Log;
+
 import edu.wm.cs.cs301.pranavgonepalli.generation.CardinalDirection;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Floorplan;
 import edu.wm.cs.cs301.pranavgonepalli.generation.Maze;
@@ -25,6 +27,7 @@ import edu.wm.cs.cs301.pranavgonepalli.gui.Constants.UserInput;
  *
  */
 public class ReliableRobot implements Robot {
+	private static final String TAG = "ReliableRobot";
 
 	//Instance variables
 	private StatePlaying control;

@@ -26,7 +26,7 @@ public class GeneratingActivity extends AppCompatActivity {
     private static final String TAG = "GeneratingActivity";
 
     private String[] drivers = {"Select", "Manual", "Wizard", "Smart Wizard", "WallFollower"};
-    private String[] robot_configurations = {"Premium", "Mediocre", "Soso", "Shaky"};
+    private String[] robot_configurations = {"Select", "Premium", "Mediocre", "Soso", "Shaky"};
     private Spinner driver_spinner;
     private Spinner robot_configuration_spinner;
     private ProgressBar progress_bar;
@@ -84,19 +84,67 @@ public class GeneratingActivity extends AppCompatActivity {
                     robot_configuration_spinner.setVisibility(TextView.GONE);
                 }
                 if(!adapterView.getItemAtPosition(i).equals("Select")){
+                    String chosen_configuration = robot_configuration_spinner.getSelectedItem().toString();
                     if(loading == true) {
-                        waiting.setText("Maze generation will be completed soon. Please wait");
+                        if(!adapterView.getItemAtPosition(i).equals("Manual")){
+                            if(chosen_configuration.equals("Select")){
+                                waiting.setText("Please select a robot configuration");
+                            }
+                            else{
+                                waiting.setText("Maze generation will be completed soon. Please wait");
+                            }
+                        }
+                        else{
+                            waiting.setText("Maze generation will be completed soon. Please wait");
+                        }
                         //Toast.makeText(getApplicationContext(), "Maze generation will be completed soon. Please wait", Toast.LENGTH_LONG).show();
                     }
                     else{
                         if(adapterView.getItemAtPosition(i).equals("Manual")){
                             switchToPlayManually();
                         }
-                        else switchToPlayAnimation();
+                        else{
+                            if(!chosen_configuration.equals("Select")){
+                                switchToPlayAnimation();
+                            }
+                            else waiting.setText("Please select a robot configuration");
+                        }
                     }
                 }
-                else waiting.setText("Maze generating...");
+                else{
+                    if(loading == true){
+                        waiting.setText("Maze generating...");
+                    }
+                    else waiting.setText("Maze generation completed. Please select a driver");
+                }
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        robot_configuration_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView waiting = findViewById(R.id.waiting_text);
+                if(!adapterView.getItemAtPosition(i).equals("Select")){
+                    if(loading == true){
+                        waiting.setText("Maze generation will be completed soon. Please wait");
+                    }
+                    else{
+                        String chosen_driver = driver_spinner.getSelectedItem().toString();
+                        if(chosen_driver.equals("Manual")){
+                            switchToPlayManually();
+                        }
+                        else{
+                            switchToPlayAnimation();
+                        }
+                    }
+                }
+                else waiting.setText("Please select a robot configuration");
+            }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -198,8 +246,15 @@ public class GeneratingActivity extends AppCompatActivity {
                                 switchToPlayManually();
                             }
                             else{
-                                Log.v(TAG, "Switching from generating to animation activity.");
-                                switchToPlayAnimation();
+                                String chosen_configuration = robot_configuration_spinner.getSelectedItem().toString();
+                                if(!chosen_configuration.equals("Select")){
+                                    Log.v(TAG, "Switching from generating to animation activity.");
+                                    switchToPlayAnimation();
+                                }
+                                else{
+                                    TextView waiting = findViewById(R.id.waiting_text);
+                                    waiting.setText("Maze generation completed. Please select a robot configuration");
+                                }
                             }
                         }
                         else{

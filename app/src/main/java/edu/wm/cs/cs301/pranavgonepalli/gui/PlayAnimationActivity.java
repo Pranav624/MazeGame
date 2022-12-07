@@ -30,10 +30,9 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private DistanceSensor backward;
     private DistanceSensor left;
     private DistanceSensor right;
-    private int pathLength = 0;
     private int shortestPath;
     private float energy = 3500;
-    private int speed = 500;
+    private int speed = 300;
     private Maze maze;
     private StatePlaying statePlaying;
     private boolean play = false;
@@ -142,17 +141,17 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if(i == 0){
                     speed_text.setText("Slow");
-                    speed = 1000;
+                    speed = 600;
                     Log.v(TAG, "Speed: Slow");
                 }
                 else if(i == 1){
                     speed_text.setText("Medium");
-                    speed = 500;
+                    speed = 300;
                     Log.v(TAG, "Speed: Medium");
                 }
                 else{
                     speed_text.setText("Fast");
-                    speed = 200;
+                    speed = 100;
                     Log.v(TAG, "Speed: Fast");
                 }
             }
@@ -183,7 +182,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         configureRobot(robot_configuration_string);
         driver.setRobot(robot_configuration);
         driver.setMaze(maze);
-        //myThread.start();
+        myThread.start();
     }
 
     /**
@@ -268,29 +267,29 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * @param v
      */
     public void playOrPause(View v){
-//        Button play_pause = (Button) findViewById(R.id.playpause_button);
-//        play = !play;
-//        if(play == false){
-//            Log.v(TAG, "Robot has stopped.");
-//            play_pause.setText("START");
-//            Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            Log.v(TAG, "Robot is moving.");
-//            play_pause.setText("PAUSE");
-//            Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
-//        }
-        myThread.start();
+        Button play_pause = (Button) findViewById(R.id.playpause_button);
+        play = !play;
+        if(play == false){
+            Log.v(TAG, "Robot has stopped.");
+            play_pause.setText("START");
+            //Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Log.v(TAG, "Robot is moving.");
+            play_pause.setText("PAUSE");
+            //Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      * Switches from PlayAnimationActivity to WinningActivity.
      */
     public void switchToWinning(){
+        myThread.interrupt();
         Intent intent = new Intent(this, WinningActivity.class);
-        intent.putExtra("path_length", pathLength);
+        intent.putExtra("path_length", robot_configuration.getOdometerReading());
         intent.putExtra("shortest_path", shortestPath);
-        intent.putExtra("energy_remaining", energy);
+        intent.putExtra("energy_consumed", (int)driver.getEnergyConsumption());
         intent.putExtra("driver", driver_string);
         startActivity(intent);
     }
@@ -299,9 +298,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * Switches from PlayAnimationActivity to LosingActivity.
      */
     public void switchToLosing(){
+        myThread.interrupt();
         Intent intent = new Intent(this, LosingActivity.class);
-        intent.putExtra("path_length", pathLength);
-        intent.putExtra("energy_remaining", energy);
+        intent.putExtra("path_length", robot_configuration.getOdometerReading());
+        intent.putExtra("energy_consumed", (int)driver.getEnergyConsumption());
         intent.putExtra("driver", driver_string);
         intent.putExtra("reason", "The robot broke!");
         startActivity(intent);
@@ -312,6 +312,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      */
     @Override
     public  void onBackPressed(){
+        myThread.interrupt();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }
@@ -323,12 +324,13 @@ public class PlayAnimationActivity extends AppCompatActivity {
         @Override
         public void run(){
             startSensors(robot_configuration);
-            while(!(robot_configuration.isAtExit() && robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
-
+            while(!(robot_configuration.isAtExit() &&
+                    robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
+                while(!play){}
                 try{
                     driver.drive1Step2Exit();
                 } catch (Exception e){
-                    robotStopped = true;
+                    switchToLosing();
                 }
                 PlayAnimationActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -344,7 +346,14 @@ public class PlayAnimationActivity extends AppCompatActivity {
                 } catch (Exception e){
                     return;
                 }
-
+            }
+            if(robot_configuration.getBatteryLevel() >= robot_configuration.getEnergyForStepForward()){
+                Log.v(TAG, "test1");
+                robot_configuration.move(1);
+                switchToWinning();
+            }
+            else{
+                switchToLosing();
             }
         }
     }
