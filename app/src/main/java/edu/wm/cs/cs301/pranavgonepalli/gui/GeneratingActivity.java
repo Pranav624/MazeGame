@@ -253,7 +253,7 @@ public class GeneratingActivity extends AppCompatActivity {
                                 }
                                 else{
                                     TextView waiting = findViewById(R.id.waiting_text);
-                                    waiting.setText("Maze generation completed. Please select a robot configuration");
+                                    waiting.setText("Please select a robot configuration");
                                 }
                             }
                         }

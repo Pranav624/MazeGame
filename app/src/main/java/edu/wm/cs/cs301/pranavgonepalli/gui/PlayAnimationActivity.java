@@ -26,6 +26,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private RobotDriver driver;
     private String robot_configuration_string;
     private Robot robot_configuration;
+    private int zoomLevel = 5;
     private DistanceSensor forward;
     private DistanceSensor backward;
     private DistanceSensor left;
@@ -122,6 +123,17 @@ public class PlayAnimationActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.v(TAG, "Zoom level: " + i);
+                if(i > zoomLevel){
+                    for(int level = 0; level < 10; level++){
+                        statePlaying.handleUserInput(Constants.UserInput.ZOOMIN, 0);
+                    }
+                }
+                else{
+                    for(int level = 0; level < 10; level++){
+                        statePlaying.handleUserInput(Constants.UserInput.ZOOMOUT, 0);
+                    }
+                }
+                zoomLevel = i;
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
