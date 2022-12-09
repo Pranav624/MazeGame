@@ -3,6 +3,7 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,7 @@ public class LosingActivity extends AppCompatActivity {
     private int energy_consumed = -1;
     private int path_length;
     private String driver;
-    private String reason;
+    private MediaPlayer deathsound;
 
     /**
      * Displays that the robot lost and the reason.
@@ -29,19 +30,19 @@ public class LosingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_losing);
 
+        deathsound = MediaPlayer.create(this, R.raw.deathsound);
+        deathsound.start();
+
         Intent intent = getIntent();
         path_length = intent.getIntExtra("path_length", 0);
         driver = intent.getStringExtra("driver");
         energy_consumed = intent.getIntExtra("energy_consumed", 0);
-        reason = intent.getStringExtra("reason");
-        Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed + ", Reason " + reason);
+        Log.v(TAG, "Path Length: " + path_length + ", Driver: " + driver + ", Energy Consumed: " + energy_consumed);
 
         TextView path_length_text = findViewById(R.id.path_length_text);
         path_length_text.setText("Path Length: " + path_length);
         TextView energy_consumed_text = findViewById(R.id.energy_consumed_text);
         energy_consumed_text.setText("Energy Consumed: " + energy_consumed);
-        TextView reason_text = findViewById(R.id.reason_text);
-        reason_text.setText(reason);
     }
 
     /**

@@ -3,6 +3,7 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ public class WinningActivity extends AppCompatActivity {
     private int path_length;
     private int shortest_path;
     private String driver;
+    private MediaPlayer intro;
 
     /**
      * Displays that the user has won.
@@ -29,6 +31,9 @@ public class WinningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winning);
 
+        intro = MediaPlayer.create(this, R.raw.intro);
+        intro.start();
+        intro.setLooping(true);
         Intent intent = getIntent();
         path_length = intent.getIntExtra("path_length", 0);
         shortest_path = intent.getIntExtra("shortest_path", 0);
@@ -54,6 +59,7 @@ public class WinningActivity extends AppCompatActivity {
      * @param v
      */
     public void switchToTitle(View v){
+        intro.stop();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }
@@ -63,6 +69,7 @@ public class WinningActivity extends AppCompatActivity {
      */
     @Override
     public  void onBackPressed(){
+        intro.stop();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }

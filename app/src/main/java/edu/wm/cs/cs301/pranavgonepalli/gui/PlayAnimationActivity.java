@@ -4,17 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import edu.wm.cs.cs301.pranavgonepalli.gui.AMazeActivity;
 import edu.wm.cs.cs301.pranavgonepalli.gui.GeneratingActivity;
@@ -43,7 +40,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private Button left_sensor_button;
     private Button right_sensor_button;
     private Button backward_sensor_button;
-    private ProgressBar energy_bar;
+    private SeekBar energy_bar;
     private TextView energy_text;
     private MediaPlayer chompsound;
     private boolean started = false;
@@ -182,7 +179,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
             }
         });
 
-        energy_bar = (ProgressBar) findViewById(R.id.progress_bar);
+        energy_bar = (SeekBar) findViewById(R.id.progress_bar);
         energy_bar.setProgress((int)energy);
         energy_text = findViewById(R.id.energy_text);
 
@@ -350,8 +347,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
         public void run(){
             started = true;
             startSensors(robot_configuration);
-            chompsound.start();
-            chompsound.setLooping(true);
+            if(play) {
+                chompsound.start();
+                chompsound.setLooping(true);
+            }
             while(!(robot_configuration.isAtExit() &&
                     robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
                 while(!play){}
