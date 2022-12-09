@@ -126,12 +126,12 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.v(TAG, "Zoom level: " + i);
                 if(i > zoomLevel){
-                    for(int level = 0; level < 10; level++){
+                    for(int level = 0; level < 10*(i - zoomLevel); level++){
                         statePlaying.handleUserInput(Constants.UserInput.ZOOMIN, 0);
                     }
                 }
                 else{
-                    for(int level = 0; level < 10; level++){
+                    for(int level = 0; level < 10*(zoomLevel - i); level++){
                         statePlaying.handleUserInput(Constants.UserInput.ZOOMOUT, 0);
                     }
                 }
@@ -349,8 +349,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
     class AnimationThread implements Runnable{
         @Override
         public void run(){
-            started = true;
             startSensors(robot_configuration);
+            started = true;
             if(play) {
                 chompsound.start();
                 chompsound.setLooping(true);
