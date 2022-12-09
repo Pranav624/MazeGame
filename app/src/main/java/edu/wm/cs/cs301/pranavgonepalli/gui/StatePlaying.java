@@ -182,7 +182,7 @@ public class StatePlaying implements State {
 	protected void startDrawer() {
 		cr = new CompassRose();
 		cr.setPositionAndSize(Constants.VIEW_WIDTH/2,
-				(int)(0.1*Constants.VIEW_HEIGHT),35);
+				(int)(0.1*Constants.VIEW_HEIGHT),70);
 
 		firstPersonView = new FirstPersonView(Constants.VIEW_WIDTH,
 				Constants.VIEW_HEIGHT, Constants.MAP_UNIT,

@@ -3,6 +3,8 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,13 +39,14 @@ public class PlayAnimationActivity extends AppCompatActivity {
     private Maze maze;
     private StatePlaying statePlaying;
     private boolean play = false;
-    private boolean robotStopped = false;
     private Button forward_sensor_button;
     private Button left_sensor_button;
     private Button right_sensor_button;
     private Button backward_sensor_button;
     private ProgressBar energy_bar;
     private TextView energy_text;
+    private MediaPlayer chompsound;
+    private boolean started = false;
     AnimationThread thread = new AnimationThread();
     Thread myThread = new Thread(thread);
 
@@ -58,6 +61,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_animation);
+
+        chompsound = MediaPlayer.create(this, R.raw.chomp);
 
         Intent intent = getIntent();
         driver_string = intent.getStringExtra("driver");
@@ -282,11 +287,16 @@ public class PlayAnimationActivity extends AppCompatActivity {
         Button play_pause = (Button) findViewById(R.id.playpause_button);
         play = !play;
         if(play == false){
+            chompsound.pause();
             Log.v(TAG, "Robot has stopped.");
             play_pause.setText("START");
             //Toast.makeText(getApplicationContext(), "Robot has stopped", Toast.LENGTH_SHORT).show();
         }
         else{
+            if(started == true){
+                chompsound.start();
+                chompsound.setLooping(true);
+            }
             Log.v(TAG, "Robot is moving.");
             play_pause.setText("PAUSE");
             //Toast.makeText(getApplicationContext(), "Robot is moving", Toast.LENGTH_SHORT).show();
@@ -297,6 +307,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * Switches from PlayAnimationActivity to WinningActivity.
      */
     public void switchToWinning(){
+        chompsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", robot_configuration.getOdometerReading());
@@ -310,6 +321,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * Switches from PlayAnimationActivity to LosingActivity.
      */
     public void switchToLosing(){
+        chompsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, LosingActivity.class);
         intent.putExtra("path_length", robot_configuration.getOdometerReading());
@@ -324,6 +336,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      */
     @Override
     public  void onBackPressed(){
+        chompsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
@@ -335,7 +348,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
     class AnimationThread implements Runnable{
         @Override
         public void run(){
+            started = true;
             startSensors(robot_configuration);
+            chompsound.start();
+            chompsound.setLooping(true);
             while(!(robot_configuration.isAtExit() &&
                     robot_configuration.canSeeThroughTheExitIntoEternity(Robot.Direction.FORWARD))){
                 while(!play){}

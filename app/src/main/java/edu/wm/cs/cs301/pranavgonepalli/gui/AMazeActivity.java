@@ -2,7 +2,9 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,7 @@ import android.content.Intent;
 import android.widget.TextView;
 
 import java.sql.Array;
+import java.util.Random;
 
 import edu.wm.cs.cs301.pranavgonepalli.R;
 
@@ -22,6 +25,7 @@ public class AMazeActivity extends AppCompatActivity {
     private SeekBar skill_level;
     private Spinner generator_spinner;
     private Spinner rooms_spinner;
+    private MediaPlayer introsound;
 
     /**
      * Create the Spinner that contains the generating algorithms, and ArrayAdapter.
@@ -35,6 +39,8 @@ public class AMazeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
+
+        introsound = MediaPlayer.create(this, R.raw.intro);
 
         generator_spinner = (Spinner) findViewById(R.id.maze_generator);
         ArrayAdapter generator = new ArrayAdapter(this, android.R.layout.simple_spinner_item, algorithms);
@@ -93,13 +99,46 @@ public class AMazeActivity extends AppCompatActivity {
 
              }
         });
+
+        introsound.start();
+        introsound.setLooping(true);
     }
 
     /**
-     * Switch from title state to generating state.
+     * Switch from title state to generating state when the explore button is pressed.
      * @param v
      */
-    public void switchToGenerating(View v){
+    public void switchToGeneratingExplore(View v){
+        introsound.stop();
+        int skill = skill_level.getProgress();
+        String builder = generator_spinner.getSelectedItem().toString();
+        String rooms_choice = rooms_spinner.getSelectedItem().toString();
+        Random rand = new Random();
+        int seed = rand.nextInt(100000);
+        boolean rooms_choice_bool = true;
+        if(rooms_choice.equals("No")){
+            rooms_choice_bool = false;
+        }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("mazePreferencesPG", MODE_PRIVATE);
+        SharedPreferences.Editor editor  = sharedPreferences.edit();
+        editor.putInt("Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice, seed);
+        editor.apply();
+
+        Intent intent = new Intent(this, GeneratingActivity.class);
+        intent.putExtra("skill", skill);
+        intent.putExtra("builder", builder);
+        intent.putExtra("rooms", rooms_choice_bool);
+        intent.putExtra("seed", seed);
+        startActivity(intent);
+    }
+
+    /**
+     * Switch from title state to generating state when the revisit button is pressed.
+     * @param v
+     */
+    public void switchToGeneratingRevisit(View v){
+        introsound.stop();
         int skill = skill_level.getProgress();
         String builder = generator_spinner.getSelectedItem().toString();
         String rooms_choice = rooms_spinner.getSelectedItem().toString();
@@ -108,6 +147,16 @@ public class AMazeActivity extends AppCompatActivity {
             rooms_choice_bool = false;
         }
         Intent intent = new Intent(this, GeneratingActivity.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("mazePreferencesPG", MODE_PRIVATE);
+        if(sharedPreferences != null &&
+                sharedPreferences.contains("Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice)){
+            intent.putExtra("seed", sharedPreferences.getInt("Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice, 0));
+        }
+        else{
+            Random rand = new Random();
+            int seed = rand.nextInt(100000);
+            intent.putExtra("seed", seed);
+        }
         intent.putExtra("skill", skill);
         intent.putExtra("builder", builder);
         intent.putExtra("rooms", rooms_choice_bool);

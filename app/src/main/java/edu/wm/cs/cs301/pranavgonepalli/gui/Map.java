@@ -406,21 +406,21 @@ public class Map {
 		// draw oval of appropriate size at the center of the screen
 		int centerX = viewWidth/2; // center x
 		int centerY = viewHeight/2; // center y
-		int diameter = mapScale/3; // circle size
+		int radius = mapScale/3; // circle size
 		if(viewDX > 0 && viewDY == 0){
-			pacmanright.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanright.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 			pacmanright.draw(panel.getMyCanvas());
 		}
 		else if(viewDX < 0 && viewDY == 0){
-			pacmanleft.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanleft.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 			pacmanleft.draw(panel.getMyCanvas());
 		}
 		else if(viewDX == 0 && viewDY > 0){
-			pacmanup.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmanup.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 			pacmanup.draw(panel.getMyCanvas());
 		}
 		else{
-			pacmandown.setBounds(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+			pacmandown.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 			pacmandown.draw(panel.getMyCanvas());
 		}
 		panel.setColor(0xffff0000);
@@ -527,7 +527,8 @@ public class Map {
 			int ny2 = mapToCoordinateY(neighbor[1],offsetY) - mapScale/2;
 			//panel.addLine(nx1, ny1, nx2, ny2);
 			//panel.addFilledOval(nx2, ny2, 20, 20);
-			panel.drawFilledCircle(nx2, ny2, 8);
+			int radius = mapScale/6;
+			panel.drawFilledCircle(nx2, ny2, radius);
 			
 			// update loop variables for current position (sx,sy)
 			// and distance d for next iteration

@@ -114,7 +114,7 @@
         app:layout_constraintTop_toBottomOf="@id/maze_rooms"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/explore_button"
-        android:onClick="switchToGenerating"
+        android:onClick="switchToGeneratingRevisit"
         />
     <Button
         android:id="@+id/explore_button"
@@ -130,6 +130,6 @@
         app:layout_constraintTop_toBottomOf="@id/maze_rooms"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/revisit_button"
-        android:onClick="switchToGenerating"
+        android:onClick="switchToGeneratingExplore"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

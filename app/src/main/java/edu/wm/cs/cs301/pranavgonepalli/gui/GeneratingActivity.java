@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,11 +36,13 @@ public class GeneratingActivity extends AppCompatActivity {
     private int skill;
     private String builder_string;
     private Order.Builder builder;
+    private int seed;
     private boolean rooms;
     private boolean loading = true;
     private MazeFactory mazeFactory;
     private DefaultOrder order;
     private static Maze maze;
+    private MediaPlayer loadingsound;
     BackgroundThread thread = new BackgroundThread();
     Thread myThread = new Thread(thread);
 
@@ -57,6 +60,8 @@ public class GeneratingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generating);
+
+        loadingsound = MediaPlayer.create(this, R.raw.cutscene);
 
         progress_bar = (SeekBar) findViewById(R.id.progress_bar);
 
@@ -174,8 +179,11 @@ public class GeneratingActivity extends AppCompatActivity {
             builder = Order.Builder.Boruvka;
         }
         rooms = intent.getBooleanExtra("rooms", true);
+        seed = intent.getIntExtra("seed", 0);
         Log.v(TAG, "Parameters Selected in Title Screen: Skill level " + skill + ", Builder " + builder_string + ", Rooms " + rooms);
         myThread.start();
+        loadingsound.start();
+        loadingsound.setLooping(true);
     }
 
     /**
@@ -190,6 +198,7 @@ public class GeneratingActivity extends AppCompatActivity {
      * Switch from GeneratingActivity to PlayManuallyActivity.
      */
     public void switchToPlayManually(){
+        loadingsound.stop();
         Intent intent = new Intent(this, PlayManuallyActivity.class);
         intent.putExtra("driver", "Manual");
         startActivity(intent);
@@ -199,6 +208,7 @@ public class GeneratingActivity extends AppCompatActivity {
      * Switch from GeneratingActivity to PlayAnimationActivity.
      */
     public void switchToPlayAnimation(){
+        loadingsound.stop();
         Intent intent = new Intent(this, PlayAnimationActivity.class);
         String chosen_driver = driver_spinner.getSelectedItem().toString();
         String chosen_robot_configuration = robot_configuration_spinner.getSelectedItem().toString();
@@ -212,6 +222,7 @@ public class GeneratingActivity extends AppCompatActivity {
      */
     @Override
     public  void onBackPressed(){
+        loadingsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
@@ -228,8 +239,6 @@ public class GeneratingActivity extends AppCompatActivity {
         @Override
         public void run(){
             mazeFactory = new MazeFactory();
-            Random rand = new Random();
-            int seed = rand.nextInt(100000);
             order = new DefaultOrder(skill, builder, !rooms, seed);
             mazeFactory.order(order);
             try{

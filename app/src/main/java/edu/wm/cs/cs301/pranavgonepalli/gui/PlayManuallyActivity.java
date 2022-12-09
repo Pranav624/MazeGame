@@ -3,6 +3,7 @@ package edu.wm.cs.cs301.pranavgonepalli.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private Maze maze;
     private StatePlaying statePlaying;
     private int zoomLevel = 5;
+    private MediaPlayer chompsound;
+    private MediaPlayer chompsound2;
 
     /**
      * Create the 3 switches that allow the user to toggle map, solution, and walls.
@@ -35,6 +38,9 @@ public class PlayManuallyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_manually);
+
+        chompsound = MediaPlayer.create(this, R.raw.chomp);
+        chompsound2 = MediaPlayer.create(this, R.raw.chomp);
 
         Intent intent = getIntent();
         driver = intent.getStringExtra("driver");
@@ -132,6 +138,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
      * @param v
      */
     public void move(View v){
+        if(chompsound.isPlaying()){
+            chompsound2.start();
+        }
+        else{
+            chompsound.start();
+        }
         Log.v(TAG, "Forward button was clicked.");
         pathLength++;
         Log.v(TAG, "Path length is " + pathLength);
@@ -169,6 +181,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
      * @param v
      */
     public void jump(View v){
+        if(chompsound.isPlaying()){
+            chompsound2.start();
+        }
+        else{
+            chompsound.start();
+        }
         Log.v(TAG, "Jump button was clicked.");
         pathLength++;
         Log.v(TAG, "Path length is " + pathLength);
