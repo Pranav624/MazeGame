@@ -50,6 +50,7 @@ public class LosingActivity extends AppCompatActivity {
      * @param v
      */
     public void switchToTitle(View v){
+        Log.v(TAG, "Switching to Title");
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }

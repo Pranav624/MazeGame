@@ -199,6 +199,7 @@ public class GeneratingActivity extends AppCompatActivity {
      */
     public void switchToPlayManually(){
         loadingsound.stop();
+        Log.v(TAG, "Switching to PlayManually");
         Intent intent = new Intent(this, PlayManuallyActivity.class);
         intent.putExtra("driver", "Manual");
         startActivity(intent);
@@ -209,6 +210,7 @@ public class GeneratingActivity extends AppCompatActivity {
      */
     public void switchToPlayAnimation(){
         loadingsound.stop();
+        Log.v(TAG, "Switching to PlayAnimation");
         Intent intent = new Intent(this, PlayAnimationActivity.class);
         String chosen_driver = driver_spinner.getSelectedItem().toString();
         String chosen_robot_configuration = robot_configuration_spinner.getSelectedItem().toString();

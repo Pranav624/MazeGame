@@ -204,6 +204,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * @param configuration
      */
     public void configureRobot(String configuration){
+        Log.v(TAG, "Configuring robot");
         if(configuration.equals("Premium")){
             robot_configuration = new ReliableRobot();
             forward = new ReliableSensor();
@@ -248,6 +249,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * @param r
      */
     public void startSensors(Robot r){
+        Log.v(TAG, "Starting sensors");
         try{
             r.startFailureAndRepairProcess(Robot.Direction.FORWARD, 4000, 2000);
             Thread.sleep(1300);
@@ -304,6 +306,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * Switches from PlayAnimationActivity to WinningActivity.
      */
     public void switchToWinning(){
+        Log.v(TAG, "Switching to Winning");
         chompsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, WinningActivity.class);
@@ -318,6 +321,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
      * Switches from PlayAnimationActivity to LosingActivity.
      */
     public void switchToLosing(){
+        Log.v(TAG, "Switching to Losing");
         chompsound.stop();
         myThread.interrupt();
         Intent intent = new Intent(this, LosingActivity.class);

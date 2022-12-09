@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
@@ -20,6 +21,7 @@ import java.util.Random;
 import edu.wm.cs.cs301.pranavgonepalli.R;
 
 public class AMazeActivity extends AppCompatActivity {
+    private static final String TAG = "AMazeActivity";
     private String[] algorithms = {"DFS", "Prim", "Boruvka"};
     private String[] rooms = {"Yes", "No"};
     private SeekBar skill_level;
@@ -124,6 +126,7 @@ public class AMazeActivity extends AppCompatActivity {
         SharedPreferences.Editor editor  = sharedPreferences.edit();
         editor.putInt("Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice, seed);
         editor.apply();
+        Log.v(TAG, "Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice + ", Seed: " + seed);
 
         Intent intent = new Intent(this, GeneratingActivity.class);
         intent.putExtra("skill", skill);
@@ -157,6 +160,7 @@ public class AMazeActivity extends AppCompatActivity {
             int seed = rand.nextInt(100000);
             intent.putExtra("seed", seed);
         }
+        Log.v(TAG, "Skill level: " + skill + ", Builder: " + builder + ", Rooms: " + rooms_choice);
         intent.putExtra("skill", skill);
         intent.putExtra("builder", builder);
         intent.putExtra("rooms", rooms_choice_bool);

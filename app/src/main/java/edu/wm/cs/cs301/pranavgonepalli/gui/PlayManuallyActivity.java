@@ -198,6 +198,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
      * Switches from PlayManuallyActivity to WinningActivity.
      */
     public void switchToWinningManual(){
+        Log.v(TAG, "Switching to Winning");
         Intent intent = new Intent(this, WinningActivity.class);
         intent.putExtra("path_length", pathLength);
         intent.putExtra("shortest_path", shortestPath);
@@ -210,6 +211,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
      */
     @Override
     public  void onBackPressed(){
+        Log.v(TAG, "Switching to Losing");
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
     }

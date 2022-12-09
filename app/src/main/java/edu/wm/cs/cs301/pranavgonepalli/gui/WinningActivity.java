@@ -59,6 +59,7 @@ public class WinningActivity extends AppCompatActivity {
      * @param v
      */
     public void switchToTitle(View v){
+        Log.v(TAG, "Switching to Title");
         intro.stop();
         Intent intent = new Intent(this, AMazeActivity.class);
         startActivity(intent);
